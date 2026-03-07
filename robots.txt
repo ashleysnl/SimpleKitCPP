@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://retirement.simplekit.app/cpp-timing-calculator/sitemap.xml
