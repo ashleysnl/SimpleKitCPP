@@ -1,8 +1,8 @@
 const TEMPLATE = {
   storageKey: "simplekit.cppTimingCalculator.v1",
-  appName: "CPP Timing Calculator Canada",
+  appName: "CPP Timing Calculator Canada: Compare 60 vs 65 vs 70",
   seoDescription:
-    "Compare taking CPP at 60, 65, or 70 and estimate break-even ages, lifetime payouts, and retirement planning tradeoffs.",
+    "CPP Timing Calculator Canada: compare CPP at 60 vs 65 vs 70, see break-even age, lifetime payout differences, and when delaying CPP may pay off.",
   siteUrl: "https://retirement.simplekit.app/cpp-timing-calculator/",
   socialImageUrl: "https://retirement.simplekit.app/social-preview.png",
   supportUrl: "https://buymeacoffee.com/ashleysnl",
@@ -41,7 +41,6 @@ const EXAMPLE_INPUTS = {
 };
 
 const el = {
-  root: document.documentElement,
   metaDescription: document.getElementById("metaDescription"),
   metaThemeColor: document.getElementById("metaThemeColor"),
   metaOgTitle: document.getElementById("metaOgTitle"),
@@ -55,7 +54,8 @@ const el = {
 
   jumpToCalculatorBtn: document.getElementById("jumpToCalculatorBtn"),
   scrollToResultsBtn: document.getElementById("scrollToResultsBtn"),
-  tabs: Array.from(document.querySelectorAll("[data-scroll-target]")),
+  calculatorForm: document.getElementById("calculatorForm"),
+  compareBtn: document.getElementById("compareBtn"),
 
   monthlyAt65: document.getElementById("monthlyAt65"),
   lifeExpectancy: document.getElementById("lifeExpectancy"),
@@ -68,11 +68,10 @@ const el = {
 
   heroAsideWinner: document.getElementById("heroAsideWinner"),
   heroAsideDetail: document.getElementById("heroAsideDetail"),
-  snapshotGrid: document.getElementById("snapshotGrid"),
   takeawayTitle: document.getElementById("takeawayTitle"),
   takeawayBody: document.getElementById("takeawayBody"),
-  takeawayMeta: document.getElementById("takeawayMeta"),
-  winnerPanel: document.getElementById("winnerPanel"),
+  takeawaySupportNudge: document.getElementById("takeawaySupportNudge"),
+  summaryBannerGrid: document.getElementById("summaryBannerGrid"),
   comparisonGrid: document.getElementById("comparisonGrid"),
   breakEvenGrid: document.getElementById("breakEvenGrid"),
   chartLegend: document.getElementById("chartLegend"),
@@ -81,11 +80,12 @@ const el = {
   insightGrid: document.getElementById("insightGrid"),
   appToast: document.getElementById("appToast"),
 
-  plannerHeroLink: document.getElementById("plannerHeroLink"),
   plannerResultsLink: document.getElementById("plannerResultsLink"),
   footerPlannerLink: document.getElementById("footerPlannerLink"),
+  supportInlineLink: document.getElementById("supportInlineLink"),
   supportLink: document.getElementById("supportLink"),
   footerSupportLink: document.getElementById("footerSupportLink"),
+  floatingSupportLink: document.getElementById("floatingSupportLink"),
 };
 
 let state = loadInputs();
@@ -102,17 +102,12 @@ function init() {
 }
 
 function bindEvents() {
-  [
-    el.monthlyAt65,
-    el.lifeExpectancy,
-    el.annualReturn,
-    el.inflationRate,
-    el.comparisonAgeOne,
-    el.comparisonAgeTwo,
-  ].forEach((input) => {
-    input?.addEventListener("input", handleInputChange);
-    input?.addEventListener("change", handleInputChange);
-  });
+  el.calculatorForm?.addEventListener("submit", handleCompareSubmit);
+
+  [el.monthlyAt65, el.lifeExpectancy, el.annualReturn, el.inflationRate, el.comparisonAgeOne, el.comparisonAgeTwo]
+    .forEach((input) => {
+      input?.addEventListener("change", syncStateFromForm);
+    });
 
   el.tryExampleBtn?.addEventListener("click", () => {
     state = normalizeInputs(EXAMPLE_INPUTS);
@@ -132,16 +127,26 @@ function bindEvents() {
 
   el.jumpToCalculatorBtn?.addEventListener("click", () => scrollToSection("calculatorPanel"));
   el.scrollToResultsBtn?.addEventListener("click", () => scrollToSection("resultsPanel"));
+}
 
-  el.tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const targetId = tab.getAttribute("data-scroll-target") || "";
-      setActiveTab(targetId);
-      scrollToSection(targetId);
-    });
+function handleCompareSubmit(event) {
+  event.preventDefault();
+  syncStateFromForm();
+  render();
+  scrollToSection("resultsPanel");
+  toast("Results updated");
+}
+
+function syncStateFromForm() {
+  state = normalizeInputs({
+    monthlyAt65: el.monthlyAt65.value,
+    lifeExpectancy: el.lifeExpectancy.value,
+    annualReturn: el.annualReturn.value,
+    inflationRate: el.inflationRate.value,
+    comparisonAgeOne: el.comparisonAgeOne.value,
+    comparisonAgeTwo: el.comparisonAgeTwo.value,
   });
-
-  window.addEventListener("scroll", updateActiveTabOnScroll, { passive: true });
+  persistInputs();
 }
 
 function loadInputs() {
@@ -160,17 +165,13 @@ function persistInputs() {
 
 function normalizeInputs(input) {
   const source = input && typeof input === "object" ? input : {};
-  const lifeExpectancy = clamp(toNumber(source.lifeExpectancy, DEFAULT_INPUTS.lifeExpectancy), 60, 105);
-  const comparisonAgeOne = clamp(toNumber(source.comparisonAgeOne, DEFAULT_INPUTS.comparisonAgeOne), 60, 105);
-  const comparisonAgeTwo = clamp(toNumber(source.comparisonAgeTwo, DEFAULT_INPUTS.comparisonAgeTwo), 60, 105);
-
   return {
     monthlyAt65: clamp(toNumber(source.monthlyAt65, DEFAULT_INPUTS.monthlyAt65), 0, 5000),
-    lifeExpectancy,
+    lifeExpectancy: clamp(toNumber(source.lifeExpectancy, DEFAULT_INPUTS.lifeExpectancy), 60, 105),
     annualReturn: clamp(toNumber(source.annualReturn, DEFAULT_INPUTS.annualReturn), 0, 12),
     inflationRate: clamp(toNumber(source.inflationRate, DEFAULT_INPUTS.inflationRate), 0, 8),
-    comparisonAgeOne,
-    comparisonAgeTwo,
+    comparisonAgeOne: clamp(toNumber(source.comparisonAgeOne, DEFAULT_INPUTS.comparisonAgeOne), 60, 105),
+    comparisonAgeTwo: clamp(toNumber(source.comparisonAgeTwo, DEFAULT_INPUTS.comparisonAgeTwo), 60, 105),
   };
 }
 
@@ -183,26 +184,10 @@ function populateForm() {
   el.comparisonAgeTwo.value = String(state.comparisonAgeTwo);
 }
 
-function handleInputChange() {
-  state = normalizeInputs({
-    monthlyAt65: el.monthlyAt65.value,
-    lifeExpectancy: el.lifeExpectancy.value,
-    annualReturn: el.annualReturn.value,
-    inflationRate: el.inflationRate.value,
-    comparisonAgeOne: el.comparisonAgeOne.value,
-    comparisonAgeTwo: el.comparisonAgeTwo.value,
-  });
-
-  persistInputs();
-  render();
-}
-
 function render() {
   const model = calculateModel(state);
-  renderSnapshot(model);
   renderHeroAside(model);
-  renderTakeaway(model);
-  renderWinnerPanel(model);
+  renderSummary(model);
   renderComparisonCards(model);
   renderBreakEvenCards(model);
   renderChart(model);
@@ -211,11 +196,7 @@ function render() {
 
 function calculateModel(inputs) {
   const comparisonAges = Array.from(
-    new Set(
-      [inputs.comparisonAgeOne, inputs.comparisonAgeTwo, inputs.lifeExpectancy]
-        .map((age) => clamp(Math.round(age), 60, 105))
-        .sort((a, b) => a - b),
-    ),
+    new Set([inputs.comparisonAgeOne, inputs.comparisonAgeTwo, inputs.lifeExpectancy].map((age) => clamp(Math.round(age), 60, 105)).sort((a, b) => a - b)),
   );
   const realAnnualRate = ((1 + inputs.annualReturn / 100) / (1 + inputs.inflationRate / 100) - 1) * 100;
   const monthlyDiscountRate = Math.pow(1 + inputs.annualReturn / 100, 1 / 12) - 1;
@@ -238,12 +219,13 @@ function calculateModel(inputs) {
       byAge: timeline.byAge,
       lifetimeTotal: timeline.totalNominal,
       discountedTotal: timeline.totalDiscounted,
-      finalAge: inputs.lifeExpectancy,
       timeline: timeline.points,
+      interpretation: getScenarioInterpretation(age),
     };
   });
 
   const winner = [...scenarios].sort((a, b) => b.lifetimeTotal - a.lifetimeTotal)[0];
+  const bestCashFlow = [...scenarios].sort((a, b) => a.age - b.age)[0];
   const winnerByDiscounted = [...scenarios].sort((a, b) => b.discountedTotal - a.discountedTotal)[0];
   const breakEvenPairs = [
     buildBreakEven(scenarios, 60, 65, inputs.lifeExpectancy),
@@ -254,22 +236,19 @@ function calculateModel(inputs) {
   return {
     inputs,
     comparisonAges,
+    realAnnualRate,
     scenarios,
     winner,
+    bestCashFlow,
     winnerByDiscounted,
     breakEvenPairs,
-    realAnnualRate,
   };
 }
 
 function getAdjustedMonthly(baseMonthlyAt65, claimAge) {
   const monthsFrom65 = Math.round((claimAge - CPP_RULES.referenceAge) * 12);
-  if (monthsFrom65 < 0) {
-    return baseMonthlyAt65 * (1 + monthsFrom65 * CPP_RULES.earlyReductionPerMonth);
-  }
-  if (monthsFrom65 > 0) {
-    return baseMonthlyAt65 * (1 + monthsFrom65 * CPP_RULES.delayedIncreasePerMonth);
-  }
+  if (monthsFrom65 < 0) return baseMonthlyAt65 * (1 + monthsFrom65 * CPP_RULES.earlyReductionPerMonth);
+  if (monthsFrom65 > 0) return baseMonthlyAt65 * (1 + monthsFrom65 * CPP_RULES.delayedIncreasePerMonth);
   return baseMonthlyAt65;
 }
 
@@ -287,12 +266,8 @@ function buildTimeline({ claimAge, monthlyPayment, planningAge, comparisonAges, 
       totalNominal += monthlyPayment;
       totalDiscounted += monthlyPayment / Math.pow(1 + monthlyDiscountRate, month);
     }
-
     if (month % 12 === 0) {
-      points.push({
-        age: roundTo(age, 1),
-        total: totalNominal,
-      });
+      points.push({ age: roundTo(age, 1), total: totalNominal });
     }
   }
 
@@ -301,12 +276,7 @@ function buildTimeline({ claimAge, monthlyPayment, planningAge, comparisonAges, 
     byAge[checkpoint] = monthlyPayment * eligibleMonths;
   });
 
-  return {
-    byAge,
-    points,
-    totalNominal,
-    totalDiscounted,
-  };
+  return { byAge, points, totalNominal, totalDiscounted };
 }
 
 function buildBreakEven(scenarios, earlyAge, laterAge, planningAge) {
@@ -321,7 +291,6 @@ function buildBreakEven(scenarios, earlyAge, laterAge, planningAge) {
     const age = 60 + month / 12;
     if (age >= earlyAge) earlyTotal += earlyScenario.monthlyPayment;
     if (age >= laterAge) laterTotal += laterScenario.monthlyPayment;
-
     if (laterTotal >= earlyTotal) {
       breakEvenAge = age;
       break;
@@ -336,39 +305,78 @@ function buildBreakEven(scenarios, earlyAge, laterAge, planningAge) {
   };
 }
 
-function renderSnapshot(model) {
-  const snapshotItems = [
+function renderHeroAside(model) {
+  const winner = model.winner;
+  const second = [...model.scenarios].sort((a, b) => b.lifetimeTotal - a.lifetimeTotal)[1];
+  const edge = winner.lifetimeTotal - second.lifetimeTotal;
+  el.heroAsideWinner.textContent =
+    winner.age === 70
+      ? "Waiting until 70 may be worth it if you expect a longer retirement."
+      : winner.age === 60
+        ? "Starting at 60 may be better if earlier cash flow matters more."
+        : "Age 65 can be the middle-ground answer in this scenario.";
+  el.heroAsideDetail.textContent = `${winner.age} leads by about ${formatCurrency(edge)} by age ${model.inputs.lifeExpectancy}, based on your assumptions.`;
+}
+
+function renderSummary(model) {
+  const breakEvenPrimary = model.breakEvenPairs[1];
+  const breakEvenEarly = model.breakEvenPairs[0];
+  const winner = model.winner;
+  const title =
+    winner.age === 70
+      ? "Waiting until 70 may maximize lifetime CPP in this scenario."
+      : winner.age === 60
+        ? "Starting CPP at 60 may make more sense in this scenario."
+        : "Starting CPP at 65 looks like the middle-ground fit here.";
+  const body =
+    winner.age === 70
+      ? "Starting later gives up earlier cash flow, but the larger monthly payment may win if you expect a longer retirement."
+      : winner.age === 60
+        ? "Starting earlier gives you income sooner, but it locks in a smaller monthly payment for life."
+        : "Age 65 balances access and benefit size without the longer wait for maximum delayed CPP."
+        ;
+
+  el.takeawayTitle.textContent = title;
+  el.takeawayBody.textContent = body;
+  el.takeawaySupportNudge.textContent = "Helpful? Support more free tools ☕";
+
+  const stats = [
     {
-      label: "Best total at age " + model.inputs.lifeExpectancy,
-      value: `CPP at ${model.winner.age}`,
-      sub: formatCurrency(model.winner.lifetimeTotal) + " total CPP",
+      label: "Scenario winner at planning age",
+      value: `CPP at ${winner.age}`,
+      sub: `${formatCurrency(winner.lifetimeTotal)} by age ${model.inputs.lifeExpectancy}`,
     },
     {
-      label: "Highest monthly CPP",
-      value: formatCurrency(model.scenarios[2].monthlyPayment),
-      sub: "Starting at age 70",
+      label: "Break-even age",
+      value: formatBreakEvenShort(breakEvenPrimary),
+      sub: "65 vs 70 comparison",
     },
     {
-      label: "Break-even 60 vs 65",
-      value: formatBreakEvenShort(model.breakEvenPairs[0]),
-      sub: model.breakEvenPairs[0].withinPlanningAge ? "Within your scenario" : "Beyond your planning age",
+      label: "Best for maximum lifetime income",
+      value: `CPP at ${winner.age}`,
+      sub: "Under this scenario",
     },
     {
-      label: "Real return assumption",
-      value: formatPercent(model.realAnnualRate),
-      sub: "Approx. return net of inflation",
+      label: "Best for earlier cash flow",
+      value: `CPP at ${model.bestCashFlow.age}`,
+      sub: "Income starts sooner",
     },
     {
-      label: "Planning horizon",
-      value: `Age ${model.inputs.lifeExpectancy}`,
-      sub: "Reference point for lifetime totals",
+      label: "60 vs 65 break-even",
+      value: formatBreakEvenShort(breakEvenEarly),
+      sub: breakEvenEarly.withinPlanningAge ? "Within your planning age" : "Beyond your planning age",
+    },
+    {
+      label: "Best discounted value",
+      value: `CPP at ${model.winnerByDiscounted.age}`,
+      sub: `At ${formatPercent(model.inputs.annualReturn)} discount rate`,
     },
   ];
 
-  el.snapshotGrid.innerHTML = snapshotItems
+  el.summaryBannerGrid.innerHTML = stats
     .map(
       (item) => `
-        <article class="trip-snapshot-item">
+        <article class="summary-stat">
           <span class="label">${escapeHtml(item.label)}</span>
           <span class="value">${escapeHtml(item.value)}</span>
           <span class="sub">${escapeHtml(item.sub)}</span>
@@ -378,85 +386,17 @@ function renderSnapshot(model) {
     .join("");
 }
 
-function renderHeroAside(model) {
-  const winner = model.winner;
-  const runnerUp = [...model.scenarios].sort((a, b) => b.lifetimeTotal - a.lifetimeTotal)[1];
-  const edge = winner.lifetimeTotal - runnerUp.lifetimeTotal;
-  el.heroAsideWinner.textContent = winner.age === 70
-    ? "Waiting until 70 leads on lifetime CPP in this scenario."
-    : winner.age === 60
-      ? "Starting at 60 leads on lifetime CPP in this scenario."
-      : "Starting at 65 is the middle-ground winner in this scenario.";
-  el.heroAsideDetail.textContent =
-    `${winner.age} leads by about ${formatCurrency(edge)} by age ${model.inputs.lifeExpectancy}, based on your assumptions.`;
-}
-
-function renderTakeaway(model) {
-  const winner = model.winner;
-  const breakEven70 = model.breakEvenPairs.find((pair) => pair.laterAge === 70);
-  const breakEven65 = model.breakEvenPairs.find((pair) => pair.earlyAge === 60 && pair.laterAge === 65);
-  const title =
-    winner.age === 70
-      ? "Waiting until 70 may maximize lifetime CPP in this scenario."
-      : winner.age === 60
-        ? "Starting CPP at 60 may produce more total CPP in this scenario."
-        : "Starting CPP at 65 looks like the middle-ground fit in this scenario.";
-
-  const body =
-    winner.age === 70
-      ? `You give up earlier payments, but the larger monthly benefit catches up if you expect a longer retirement. Delaying can be especially useful when you want stronger guaranteed income later in life.`
-      : winner.age === 60
-        ? `Taking CPP earlier can make sense when your planning horizon is shorter or you value cash flow sooner. The tradeoff is a permanently lower monthly benefit.`
-        : `Age 65 balances immediate access and benefit size. It will not maximize the monthly cheque like age 70, but it avoids the long wait for delayed CPP.`;
-
-  const metaItems = [
-    `Best total by age ${model.inputs.lifeExpectancy}: CPP at ${winner.age}`,
-    `60 vs 65 break-even: ${formatBreakEvenShort(breakEven65)}`,
-    `65 vs 70 break-even: ${formatBreakEvenShort(breakEven70)}`,
-  ];
-
-  el.takeawayTitle.textContent = title;
-  el.takeawayBody.textContent = body;
-  el.takeawayMeta.innerHTML = metaItems.map((item) => `<span class="pill">${escapeHtml(item)}</span>`).join("");
-}
-
-function renderWinnerPanel(model) {
-  const nominalEdge = model.winner.lifetimeTotal - [...model.scenarios].sort((a, b) => b.lifetimeTotal - a.lifetimeTotal)[1].lifetimeTotal;
-  const discountedLead = model.winnerByDiscounted.age;
-
-  el.winnerPanel.innerHTML = `
-    <span class="winner-badge">Illustrative best fit</span>
-    <div class="winner-metric">
-      <span class="muted small-copy">Highest estimated lifetime CPP by age ${escapeHtml(String(model.inputs.lifeExpectancy))}</span>
-      <strong>Start at age ${escapeHtml(String(model.winner.age))}</strong>
-    </div>
-    <p class="muted">Nominal lifetime CPP is about ${escapeHtml(formatCurrency(model.winner.lifetimeTotal))}, which is roughly ${escapeHtml(formatCurrency(nominalEdge))} ahead of the next-best option.</p>
-    <p class="muted">Using your return assumption, the strongest discounted value is CPP at ${escapeHtml(String(discountedLead))}.</p>
-  `;
-}
-
 function renderComparisonCards(model) {
   el.comparisonGrid.innerHTML = model.scenarios
     .map((scenario) => {
-      const ageRows = model.comparisonAges
-        .map(
-          (age) => `
-            <div class="metric-stack-row">
-              <span>By age ${escapeHtml(String(age))}</span>
-              <span>${escapeHtml(formatCurrency(scenario.byAge[age] || 0))}</span>
-            </div>
-          `,
-        )
-        .join("");
-
       return `
         <article class="result-card">
           <div class="result-card-header">
             <div>
               <h4>CPP at ${escapeHtml(String(scenario.age))}</h4>
-              <div class="scenario-age">Claim age ${escapeHtml(String(scenario.age))}</div>
+              <div class="scenario-age">${escapeHtml(getScenarioLabel(scenario.age))}</div>
             </div>
-            <span class="pill">${escapeHtml(getScenarioLabel(scenario.age))}</span>
+            <span class="pill">${escapeHtml(`Age ${scenario.age}`)}</span>
           </div>
           <p class="scenario-monthly">${escapeHtml(formatCurrency(scenario.monthlyPayment))}<span class="scenario-age"> / month</span></p>
           <div class="metric-stack">
@@ -464,7 +404,6 @@ function renderComparisonCards(model) {
               <span>Annual CPP</span>
               <span>${escapeHtml(formatCurrency(scenario.annualPayment))}</span>
             </div>
-            ${ageRows}
             <div class="metric-stack-row">
               <span>Total by age ${escapeHtml(String(model.inputs.lifeExpectancy))}</span>
               <span>${escapeHtml(formatCurrency(scenario.lifetimeTotal))}</span>
@@ -474,6 +413,7 @@ function renderComparisonCards(model) {
               <span>${escapeHtml(formatCurrency(scenario.discountedTotal))}</span>
             </div>
           </div>
+          <p class="scenario-take">${escapeHtml(scenario.interpretation)}</p>
         </article>
       `;
     })
@@ -483,19 +423,20 @@ function renderComparisonCards(model) {
 function renderBreakEvenCards(model) {
   el.breakEvenGrid.innerHTML = model.breakEvenPairs
     .map((pair) => {
-      const headline = pair.breakEvenAge === null
-        ? `CPP at ${pair.laterAge} does not catch CPP at ${pair.earlyAge} by age ${CPP_RULES.maxProjectionAge}.`
-        : `CPP at ${pair.laterAge} overtakes CPP at ${pair.earlyAge} around age ${roundTo(pair.breakEvenAge, 1)}.`;
-
-      const body = pair.breakEvenAge === null
-        ? `Under these assumptions, the later start never makes up the missed payments in the model horizon.`
-        : pair.withinPlanningAge
-          ? `That break-even point is within your planning age of ${model.inputs.lifeExpectancy}, so waiting is more plausible if you expect to live that long or longer.`
-          : `That break-even point is beyond your planning age of ${model.inputs.lifeExpectancy}, so the earlier start stays ahead in total dollars within this scenario.`;
+      const headline =
+        pair.breakEvenAge === null
+          ? `CPP at ${pair.laterAge} does not catch CPP at ${pair.earlyAge} by age ${CPP_RULES.maxProjectionAge}.`
+          : `CPP at ${pair.laterAge} catches CPP at ${pair.earlyAge} around age ${roundTo(pair.breakEvenAge, 1)}.`;
+      const body =
+        pair.breakEvenAge === null
+          ? "Under this scenario, the earlier start stays ahead through the modeled horizon."
+          : pair.withinPlanningAge
+            ? `That is within your planning age of ${model.inputs.lifeExpectancy}, so the larger later payment may have time to catch up.`
+            : `That is beyond your planning age of ${model.inputs.lifeExpectancy}, so the earlier start stays ahead in total dollars within this scenario.`;
 
       return `
         <article class="break-even-card">
-          <h4>${escapeHtml(pair.earlyAge)} vs ${escapeHtml(pair.laterAge)}</h4>
+          <h4>${escapeHtml(`${pair.earlyAge} vs ${pair.laterAge}`)}</h4>
           <p class="muted">${escapeHtml(headline)}</p>
           <p class="muted small-copy">${escapeHtml(body)}</p>
         </article>
@@ -516,16 +457,16 @@ function renderChart(model) {
     )
     .join("");
 
-  const chartWidth = 900;
-  const chartHeight = 420;
+  const chartWidth = 860;
+  const chartHeight = 380;
   const padding = { top: 20, right: 20, bottom: 40, left: 64 };
   const plotWidth = chartWidth - padding.left - padding.right;
   const plotHeight = chartHeight - padding.top - padding.bottom;
-  const maxAge = model.inputs.lifeExpectancy;
   const minAge = 60;
+  const maxAge = model.inputs.lifeExpectancy;
   const maxValue = Math.max(...model.scenarios.flatMap((scenario) => scenario.timeline.map((point) => point.total)), 1);
   const yTicks = 4;
-  const xYears = Array.from({ length: maxAge - minAge + 1 }, (_, index) => minAge + index).filter((age) => age % 5 === 0 || age === maxAge || age === minAge);
+  const xYears = Array.from({ length: maxAge - minAge + 1 }, (_, index) => minAge + index).filter((age) => age === minAge || age === maxAge || age % 5 === 0);
 
   const lines = model.scenarios
     .map((scenario) => {
@@ -536,14 +477,7 @@ function renderChart(model) {
           return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
         })
         .join(" ");
-      const lastPoint = scenario.timeline[scenario.timeline.length - 1];
-      const lastX = padding.left + ((lastPoint.age - minAge) / (maxAge - minAge || 1)) * plotWidth;
-      const lastY = padding.top + plotHeight - (lastPoint.total / maxValue) * plotHeight;
-
-      return `
-        <path class="chart-line" d="${path}" stroke="${escapeHtml(TEMPLATE.chartColors[scenario.age])}"></path>
-        <circle class="chart-endpoint" cx="${lastX.toFixed(2)}" cy="${lastY.toFixed(2)}" r="5" fill="${escapeHtml(TEMPLATE.chartColors[scenario.age])}"></circle>
-      `;
+      return `<path class="chart-line" d="${path}" stroke="${escapeHtml(TEMPLATE.chartColors[scenario.age])}"></path>`;
     })
     .join("");
 
@@ -561,7 +495,6 @@ function renderChart(model) {
     .map((age) => {
       const x = padding.left + ((age - minAge) / (maxAge - minAge || 1)) * plotWidth;
       return `
-        <line class="chart-axis" x1="${x.toFixed(2)}" y1="${padding.top}" x2="${x.toFixed(2)}" y2="${chartHeight - padding.bottom}"></line>
         <text class="chart-label" x="${x.toFixed(2)}" y="${chartHeight - 12}" text-anchor="middle">${escapeHtml(String(age))}</text>
       `;
     })
@@ -571,14 +504,14 @@ function renderChart(model) {
     <svg class="chart-svg" viewBox="0 0 ${chartWidth} ${chartHeight}" aria-hidden="true">
       <rect x="${padding.left}" y="${padding.top}" width="${plotWidth}" height="${plotHeight}" fill="#fbfdff" stroke="#e6edf7" rx="14"></rect>
       ${yGrid}
-      ${xLabels}
       ${lines}
+      ${xLabels}
       <text class="chart-label" x="${chartWidth / 2}" y="${chartHeight - 4}" text-anchor="middle">Age</text>
-      <text class="chart-label" transform="translate(18 ${chartHeight / 2}) rotate(-90)" text-anchor="middle">Cumulative CPP received</text>
+      <text class="chart-label" transform="translate(18 ${chartHeight / 2}) rotate(-90)" text-anchor="middle">Cumulative CPP</text>
     </svg>
   `;
 
-  el.chartCaption.textContent = `Chart runs from age 60 to age ${model.inputs.lifeExpectancy}. It shows estimated cumulative CPP only and does not include tax, investment growth, or other retirement income sources.`;
+  el.chartCaption.textContent = `Chart runs from age 60 to age ${model.inputs.lifeExpectancy}. It shows estimated cumulative CPP only, not tax, investment growth, or other retirement income.`;
 }
 
 function renderInsights(model) {
@@ -587,28 +520,28 @@ function renderInsights(model) {
   const scenario70 = model.scenarios.find((scenario) => scenario.age === 70);
   const insights = [
     {
+      title: "Longer retirement can favour delaying",
+      body: `If you expect a longer retirement, the larger CPP payment at 70 has more time to catch up and move ahead.`,
+    },
+    {
+      title: "Earlier CPP helps with cash flow sooner",
+      body: `CPP at 60 gives income sooner, which can matter if you want less pressure on savings in your early retirement years.`,
+    },
+    {
       title: "Waiting meaningfully raises the monthly cheque",
       body: `CPP at 70 is about ${formatPercent(((scenario70.monthlyPayment / scenario65.monthlyPayment) - 1) * 100)} higher per month than CPP at 65 in this model.`,
     },
     {
-      title: "Early CPP can stay ahead for a long time",
-      body: `${formatBreakEvenSentence(model.breakEvenPairs[0])} That is why shorter planning horizons often favour earlier income.`,
+      title: "CPP timing should be coordinated",
+      body: `Review CPP with OAS, workplace pensions, RRSP/RRIF withdrawals, tax, and spending needs before deciding.`,
     },
     {
-      title: "Break-even depends heavily on lifespan",
-      body: `If your planning horizon extends well past the break-even age, delaying becomes easier to justify. If not, earlier CPP may produce more total income.`,
-    },
-    {
-      title: "CPP timing is only one retirement lever",
-      body: `Review CPP beside OAS, pensions, RRSP/RRIF withdrawals, TFSA flexibility, and spending needs before making a real-world decision.`,
-    },
-    {
-      title: "Discounted value can tell a different story",
-      body: `When future income is discounted at ${formatPercent(model.inputs.annualReturn)}, the strongest present-value option here is CPP at ${model.winnerByDiscounted.age}.`,
+      title: "Break-even is useful, but not the whole story",
+      body: `${formatBreakEvenSentence(model.breakEvenPairs[1])} Health, taxes, survivor needs, and flexibility also matter.`,
     },
     {
       title: "Age 65 remains the baseline reference",
-      body: `Your input amount at age 65 is the anchor used to estimate the age 60 and age 70 scenarios under standard timing adjustment rules.`,
+      body: `Your input amount at 65 is the reference used to estimate the 60 and 70 scenarios.`,
     },
   ];
 
@@ -622,6 +555,12 @@ function renderInsights(model) {
       `,
     )
     .join("");
+}
+
+function getScenarioInterpretation(age) {
+  if (age === 60) return "Best if earlier cash flow matters more than maximizing later guaranteed income.";
+  if (age === 65) return "Balanced option if you want a standard baseline without waiting until 70.";
+  return "Best if you want the largest monthly CPP and expect a longer retirement horizon.";
 }
 
 function syncHeadMeta() {
@@ -639,10 +578,10 @@ function syncHeadMeta() {
 }
 
 function syncStaticLinks() {
-  [el.plannerHeroLink, el.plannerResultsLink, el.footerPlannerLink].forEach((link) => {
+  [el.plannerResultsLink, el.footerPlannerLink].forEach((link) => {
     if (link) link.href = TEMPLATE.retirementPlannerUrl;
   });
-  [el.supportLink, el.footerSupportLink].forEach((link) => {
+  [el.supportInlineLink, el.supportLink, el.footerSupportLink, el.floatingSupportLink].forEach((link) => {
     if (link) link.href = TEMPLATE.supportUrl;
   });
 }
@@ -651,26 +590,6 @@ function scrollToSection(targetId) {
   const section = document.getElementById(targetId);
   if (!section) return;
   section.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function setActiveTab(targetId) {
-  el.tabs.forEach((tab) => {
-    const active = tab.getAttribute("data-scroll-target") === targetId;
-    tab.classList.toggle("active", active);
-  });
-}
-
-function updateActiveTabOnScroll() {
-  const sections = ["calculatorPanel", "resultsPanel", "learnPanel", "faqPanel"];
-  let active = sections[0];
-  for (let index = 0; index < sections.length; index += 1) {
-    const sectionId = sections[index];
-    const section = document.getElementById(sectionId);
-    if (!section) continue;
-    const rect = section.getBoundingClientRect();
-    if (rect.top <= 140) active = sectionId;
-  }
-  setActiveTab(active);
 }
 
 function toast(message) {
