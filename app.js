@@ -32,9 +32,9 @@ const DEFAULT_INPUTS = {
 };
 
 const EXAMPLE_INPUTS = {
-  monthlyAt65: 1100,
-  lifeExpectancy: 92,
-  annualReturn: 4.5,
+  monthlyAt65: 1200,
+  lifeExpectancy: 90,
+  annualReturn: 3,
   inflationRate: 2,
   comparisonAgeOne: 78,
   comparisonAgeTwo: 88,
@@ -70,6 +70,8 @@ const el = {
   heroAsideDetail: document.getElementById("heroAsideDetail"),
   takeawayTitle: document.getElementById("takeawayTitle"),
   takeawayBody: document.getElementById("takeawayBody"),
+  takeawaySecondary: document.getElementById("takeawaySecondary"),
+  takeawayCaution: document.getElementById("takeawayCaution"),
   takeawaySupportNudge: document.getElementById("takeawaySupportNudge"),
   summaryBannerGrid: document.getElementById("summaryBannerGrid"),
   comparisonGrid: document.getElementById("comparisonGrid"),
@@ -82,7 +84,7 @@ const el = {
 
   plannerResultsLink: document.getElementById("plannerResultsLink"),
   footerPlannerLink: document.getElementById("footerPlannerLink"),
-  supportInlineLink: document.getElementById("supportInlineLink"),
+  supportMicroLink: document.getElementById("supportMicroLink"),
   supportLink: document.getElementById("supportLink"),
   footerSupportLink: document.getElementById("footerSupportLink"),
   floatingSupportLink: document.getElementById("floatingSupportLink"),
@@ -114,6 +116,7 @@ function bindEvents() {
     persistInputs();
     populateForm();
     render();
+    scrollToSection("resultsPanel");
     toast("Example scenario loaded");
   });
 
@@ -333,17 +336,25 @@ function renderSummary(model) {
       ? "Starting later gives up earlier cash flow, but the larger monthly payment may win if you expect a longer retirement."
       : winner.age === 60
         ? "Starting earlier gives you income sooner, but it locks in a smaller monthly payment for life."
-        : "Age 65 balances access and benefit size without the longer wait for maximum delayed CPP."
-        ;
+        : "Age 65 balances access and benefit size without the longer wait for maximum delayed CPP.";
+  const secondary =
+    winner.age === 70
+      ? "If you expect a longer retirement, delaying CPP may pay off."
+      : winner.age === 60
+        ? "If you need income sooner, earlier CPP may still be reasonable."
+        : "If you want a baseline starting point, age 65 is often the practical reference option.";
+  const caution = "Scenario-based estimate only. It is useful for planning, but it is not personalized financial advice.";
 
   el.takeawayTitle.textContent = title;
   el.takeawayBody.textContent = body;
-  el.takeawaySupportNudge.textContent = "Helpful? Support more free tools ☕";
+  el.takeawaySecondary.textContent = secondary;
+  el.takeawayCaution.textContent = caution;
+  el.takeawaySupportNudge.textContent = "Did this clarify your CPP decision? Support more free tools ☕";
 
   const stats = [
     {
-      label: "Scenario winner at planning age",
-      value: `CPP at ${winner.age}`,
+      label: "Best for lifetime income in this scenario",
+      value: `Start CPP at ${winner.age}`,
       sub: `${formatCurrency(winner.lifetimeTotal)} by age ${model.inputs.lifeExpectancy}`,
     },
     {
@@ -358,7 +369,7 @@ function renderSummary(model) {
     },
     {
       label: "Best for earlier cash flow",
-      value: `CPP at ${model.bestCashFlow.age}`,
+      value: `Start CPP at ${model.bestCashFlow.age}`,
       sub: "Income starts sooner",
     },
     {
@@ -581,7 +592,7 @@ function syncStaticLinks() {
   [el.plannerResultsLink, el.footerPlannerLink].forEach((link) => {
     if (link) link.href = TEMPLATE.retirementPlannerUrl;
   });
-  [el.supportInlineLink, el.supportLink, el.footerSupportLink, el.floatingSupportLink].forEach((link) => {
+  [el.supportMicroLink, el.supportLink, el.footerSupportLink, el.floatingSupportLink].forEach((link) => {
     if (link) link.href = TEMPLATE.supportUrl;
   });
 }

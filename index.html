@@ -35,6 +35,13 @@
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6SS26QC3C9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-6SS26QC3C9");
+  </script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -62,6 +69,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "No. Delaying increases monthly guaranteed income, but whether it pays off depends on longevity, cash flow needs, and how the rest of your retirement plan is structured."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is CPP timing enough to decide my retirement plan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. CPP timing is one part of retirement income planning and should be reviewed alongside OAS, pensions, RRSP or RRIF withdrawals, taxes, and spending needs."
           }
         },
         {
@@ -116,7 +131,8 @@
           <form id="calculatorForm" class="activity-form calculator-form" novalidate>
             <div class="microcopy-row form-span-full">
               <span>Use your estimated age-65 CPP amount as the starting point.</span>
-              <span>This is a planning tool, not a Service Canada quote.</span>
+              <span>Uses standard CPP timing adjustment assumptions.</span>
+              <span>Planning estimate only — confirm your exact entitlement with Service Canada.</span>
             </div>
 
             <label>
@@ -165,6 +181,7 @@
               <button id="tryExampleBtn" class="btn btn-secondary btn-secondary-panel" type="button">Try example</button>
               <button id="resetDefaultsBtn" class="btn btn-secondary btn-secondary-panel" type="button">Reset</button>
             </div>
+            <p class="form-example-note form-span-full muted small-copy">New here? Try an example to see a realistic 60 vs 65 vs 70 comparison instantly.</p>
           </form>
         </div>
       </section>
@@ -180,7 +197,12 @@
             <span class="pill pill-accent">Quick answer</span>
             <h3 id="takeawayTitle">Waiting until 70 may maximize lifetime CPP in this scenario.</h3>
             <p id="takeawayBody" class="muted"></p>
-            <p id="takeawaySupportNudge" class="support-nudge no-print"></p>
+            <p id="takeawaySecondary" class="summary-secondary"></p>
+            <p id="takeawayCaution" class="summary-caution"></p>
+            <div class="support-nudge-wrap no-print">
+              <p id="takeawaySupportNudge" class="support-nudge"></p>
+              <a id="supportMicroLink" class="support-inline-link" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Support this tool</a>
+            </div>
           </div>
           <div id="summaryBannerGrid" class="summary-banner-grid" aria-live="polite"></div>
         </article>
@@ -207,6 +229,9 @@
             <p class="muted small-copy">See how each start age adds up over your retirement horizon.</p>
           </div>
           <article class="subsection chart-card">
+            <div class="chart-helper">
+              <p class="muted small-copy">This chart shows estimated cumulative CPP received by age. The lines cross at the break-even point, where a later start catches up to an earlier start.</p>
+            </div>
             <div id="chartLegend" class="chart-legend" aria-hidden="true"></div>
             <div id="chartContainer" class="chart-container" role="img" aria-label="Cumulative CPP comparison chart"></div>
             <p id="chartCaption" class="muted small-copy"></p>
@@ -220,17 +245,6 @@
           </div>
           <div id="insightGrid" class="insight-grid" aria-live="polite"></div>
         </section>
-      </section>
-
-      <section id="inlineSupportPanel" class="panel support-inline-panel" aria-labelledby="inlineSupportHeading">
-        <div class="inline-support-card">
-          <div>
-            <p class="support-kicker">Did this save you time?</p>
-            <h2 id="inlineSupportHeading">Support more free Canadian retirement tools</h2>
-            <p class="muted">If this clarified your CPP decision, you can support future SimpleKit tools for the price of a coffee. No paywall, no account, just continued maintenance and more planning tools.</p>
-          </div>
-          <a id="supportInlineLink" class="btn btn-primary" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Buy Me a Coffee</a>
-        </div>
       </section>
 
       <section id="learnPanel" class="panel" aria-labelledby="learnHeading">
@@ -321,9 +335,42 @@
         </div>
       </section>
 
+      <section id="startCppPanel" class="panel" aria-labelledby="startCppHeading">
+        <div class="panel-header panel-header-tight">
+          <h2 id="startCppHeading">When Should You Start CPP?</h2>
+          <p>Short guidance for the most common Canadian CPP timing questions.</p>
+        </div>
+        <div class="scenario-grid">
+          <article class="subsection">
+            <h3>Taking CPP at 60</h3>
+            <p class="muted">Starting at 60 can be attractive when you want income sooner or expect to rely less on later guaranteed income. The tradeoff is a permanently reduced monthly payment.</p>
+          </article>
+          <article class="subsection">
+            <h3>Taking CPP at 65</h3>
+            <p class="muted">Age 65 is the baseline reference point for CPP timing comparisons. Many people use it as the default benchmark before deciding whether starting earlier or later is worthwhile.</p>
+          </article>
+          <article class="subsection">
+            <h3>Delaying CPP to 70</h3>
+            <p class="muted">Delaying CPP can make sense if you expect a longer retirement and want higher guaranteed income later in life. The key tradeoff is giving up several years of earlier payments.</p>
+          </article>
+          <article class="subsection">
+            <h3>When people often choose CPP at 60</h3>
+            <p class="muted">People often choose earlier CPP when cash flow matters now, work stops earlier than planned, or they prefer to take income sooner instead of waiting for a larger later payment.</p>
+          </article>
+          <article class="subsection">
+            <h3>When delaying CPP may make sense</h3>
+            <p class="muted">Delaying may be more attractive when you have other income sources such as savings or a pension and want to strengthen guaranteed income later in retirement.</p>
+          </article>
+          <article class="subsection">
+            <h3>Why break-even age is helpful, but not the whole decision</h3>
+            <p class="muted">Break-even age shows when delaying may catch up, but it does not fully capture taxes, health, survivor needs, spending flexibility, or the rest of your retirement plan.</p>
+          </article>
+        </div>
+      </section>
+
       <section class="panel cta-panel" aria-labelledby="plannerHeading">
         <div class="panel-header panel-header-tight">
-          <h2 id="plannerHeading">Next tools</h2>
+          <h2 id="plannerHeading">More free Canadian retirement tools</h2>
           <p>Use these when you want to go beyond the CPP timing question.</p>
         </div>
         <div class="tool-grid">
@@ -352,10 +399,10 @@
         </div>
         <div class="support-card support-card-strong">
           <div>
-            <h3>If this tool helped, you can help keep the next one free.</h3>
-            <p class="muted">Support continued maintenance, improvements, and more SimpleKit retirement tools without a paywall.</p>
+            <h3>If this helped you understand your CPP decision, support more free Canadian retirement tools.</h3>
+            <p class="muted">This calculator is free to use. Support helps keep SimpleKit tools available, improving, and useful without a paywall.</p>
           </div>
-          <a id="supportLink" class="btn btn-primary" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Support the tool</a>
+          <a id="supportLink" class="btn btn-primary" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Buy Me a Coffee</a>
         </div>
       </section>
     </main>
