@@ -94,206 +94,249 @@
 <body>
   <div class="page-shell">
     <header class="hero" aria-labelledby="heroTitle">
-      <div class="hero-content hero-content-compact">
-        <p class="eyebrow">SimpleKit Retirement Tools • Canada-focused • Educational estimate</p>
+      <div class="hero-copy">
         <h1 id="heroTitle">CPP Timing Calculator Canada</h1>
-        <p class="hero-subtitle">
-          Compare taking CPP at 60, 65, or 70, see break-even age, and understand when delaying may pay off.
+        <p class="hero-subtitle">Should you take CPP at 60, 65, or 70? Compare your monthly income, lifetime totals, and break-even age in minutes.</p>
+        <div class="hero-benefits" aria-label="What this calculator helps with">
+          <span>Compare 60, 65, and 70</span>
+          <span>Spot the break-even age</span>
+        </div>
+        <div class="hero-actions no-print">
+          <button id="jumpToCalculatorBtn" class="btn btn-primary" type="button">Calculate My CPP Strategy</button>
+        </div>
+        <p class="hero-trust-inline">
+          Educational estimate only. Not a Service Canada quote.
+          <a
+            class="source-link source-link-light"
+            href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/cpp-benefit/when-start.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >See the official CPP timing guide</a>
         </p>
-        <div class="hero-benefits" aria-label="What you get">
-          <span>Compare 60 vs 65 vs 70</span>
-          <span>See break-even age</span>
-          <span>Get a plain-English takeaway</span>
-        </div>
-        <div class="hero-cta-row no-print">
-          <button id="jumpToCalculatorBtn" class="btn btn-primary" type="button">Compare CPP timing</button>
-        </div>
-      </div>
-      <div class="hero-aside">
-        <div class="hero-aside-card">
-          <span class="hero-aside-label">Fast answer</span>
-          <strong id="heroAsideWinner" class="hero-aside-value">Waiting until 70 usually pays off if you expect a longer retirement.</strong>
-          <p id="heroAsideDetail" class="hero-aside-copy">
-            Use your estimated age-65 CPP amount as the starting point. This is a planning tool, not a Service Canada quote.
-          </p>
-        </div>
       </div>
     </header>
 
-    <main class="tabbed-layout">
-      <section id="calculatorPanel" class="panel" aria-labelledby="calculatorHeading">
-        <div class="panel-header panel-header-tight">
-          <h2 id="calculatorHeading">Compare your CPP timing</h2>
-          <p>Enter the key numbers, then compare your 60, 65, and 70 scenarios.</p>
+    <main class="page-flow">
+      <section id="calculatorPanel" class="panel calculator-panel" aria-labelledby="calculatorHeading">
+        <div class="panel-header">
+          <h2 id="calculatorHeading">Quick start calculator</h2>
+          <p>Enter two numbers to compare your options.</p>
         </div>
 
-        <div class="calculator-layout calculator-layout-single">
-          <form id="calculatorForm" class="activity-form calculator-form" novalidate>
-            <div class="microcopy-row form-span-full">
-              <span>Use your estimated age-65 CPP amount as the starting point.</span>
-              <span>Uses standard CPP timing adjustment assumptions.</span>
-              <span>Planning estimate only — confirm your exact entitlement with Service Canada.</span>
+        <div class="quick-start-shell">
+          <form id="calculatorForm" class="calculator-form" novalidate>
+            <div class="comparison-strip" aria-label="Comparison ages">
+              <span class="comparison-pill active">Age 60</span>
+              <span class="comparison-pill active">Age 65</span>
+              <span class="comparison-pill active">Age 70</span>
             </div>
 
-            <label>
-              Monthly CPP at age 65
+            <label class="form-field">
+              <span>Monthly CPP at age 65</span>
               <input id="monthlyAt65" name="monthlyAt65" type="number" min="0" max="5000" step="1" inputmode="decimal" />
-              <span class="field-help">Your estimated monthly CPP at the standard start age.</span>
+              <small>Use your estimated age-65 CPP as your baseline.</small>
+              <span class="field-actions no-print">
+                <button id="tryExampleBtn" class="text-link-btn" type="button">Try example</button>
+                <span class="muted small-copy">Example: $1,200 at 65</span>
+              </span>
             </label>
 
-            <label>
-              Planning age
+            <label class="form-field">
+              <span>Planning age</span>
               <input id="lifeExpectancy" name="lifeExpectancy" type="number" min="60" max="105" step="1" inputmode="numeric" />
-              <span class="field-help">Used to compare total CPP under this scenario.</span>
+              <small>We compare total CPP up to this age.</small>
             </label>
 
-            <label>
-              Return / discount rate (%)
-              <input id="annualReturn" name="annualReturn" type="number" min="0" max="12" step="0.1" inputmode="decimal" />
-              <span class="field-help">Used for present-value style comparisons.</span>
-            </label>
+            <p class="quick-start-note">
+              Uses standard CPP timing assumptions. Planning estimate only.
+              <a
+                class="source-link"
+                href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/cpp-benefit/when-start.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Official Service Canada source</a>
+            </p>
 
-            <details class="form-span-full advanced-card">
-              <summary>Advanced assumptions</summary>
+            <div class="form-actions no-print">
+              <button id="compareBtn" class="btn btn-primary" type="submit">Calculate My CPP Strategy</button>
+            </div>
+
+            <div class="example-row no-print">
+              <button id="resetDefaultsBtn" class="text-link-btn" type="button">Reset</button>
+              <span class="muted small-copy">Planning age example: 90.</span>
+            </div>
+
+            <details class="advanced-card">
+              <summary>Advanced assumptions (optional)</summary>
+              <p class="advanced-copy">Use these only if you want to test more detailed planning assumptions.</p>
               <div class="advanced-grid">
-                <label>
-                  Inflation (%)
+                <label class="form-field">
+                  <span>Return / discount rate (%)</span>
+                  <input id="annualReturn" name="annualReturn" type="number" min="0" max="12" step="0.1" inputmode="decimal" />
+                  <small>Used for present-value style comparisons.</small>
+                </label>
+
+                <label class="form-field">
+                  <span>Inflation (%)</span>
                   <input id="inflationRate" name="inflationRate" type="number" min="0" max="8" step="0.1" inputmode="decimal" />
-                  <span class="field-help">For real-return context.</span>
+                  <small>Helps show real-return context.</small>
                 </label>
 
-                <label>
-                  Comparison age 1
+                <label class="form-field">
+                  <span>Comparison age 1</span>
                   <input id="comparisonAgeOne" name="comparisonAgeOne" type="number" min="60" max="105" step="1" inputmode="numeric" />
-                  <span class="field-help">Checkpoint for cumulative CPP.</span>
+                  <small>Optional checkpoint for total CPP.</small>
                 </label>
 
-                <label>
-                  Comparison age 2
+                <label class="form-field">
+                  <span>Comparison age 2</span>
                   <input id="comparisonAgeTwo" name="comparisonAgeTwo" type="number" min="60" max="105" step="1" inputmode="numeric" />
-                  <span class="field-help">Second checkpoint.</span>
+                  <small>Second optional checkpoint.</small>
                 </label>
               </div>
             </details>
-
-            <div class="form-actions form-span-full no-print">
-              <button id="compareBtn" class="btn btn-primary" type="submit">Compare CPP timing</button>
-              <button id="tryExampleBtn" class="btn btn-secondary btn-secondary-panel" type="button">Try example</button>
-              <button id="resetDefaultsBtn" class="btn btn-secondary btn-secondary-panel" type="button">Reset</button>
-            </div>
-            <p class="form-example-note form-span-full muted small-copy">New here? Try an example to see a realistic 60 vs 65 vs 70 comparison instantly.</p>
           </form>
         </div>
       </section>
 
       <section id="resultsPanel" class="panel results-panel" aria-labelledby="resultsHeading">
-        <div class="panel-header panel-header-tight">
-          <h2 id="resultsHeading">Your answer</h2>
-          <p>Scenario-based results based on your assumptions.</p>
+        <div class="panel-header">
+          <h2 id="resultsHeading">Recommendation</h2>
+          <p>Your answer first, then your three choices, then the proof.</p>
         </div>
 
-        <article class="subsection summary-banner">
-          <div class="summary-banner-main">
-            <span class="pill pill-accent">Quick answer</span>
-            <h3 id="takeawayTitle">Waiting until 70 may maximize lifetime CPP in this scenario.</h3>
-            <p id="takeawayBody" class="muted"></p>
-            <p id="takeawaySecondary" class="summary-secondary"></p>
-            <p id="takeawayCaution" class="summary-caution"></p>
-            <div class="support-nudge-wrap no-print">
-              <p id="takeawaySupportNudge" class="support-nudge"></p>
-              <a id="supportMicroLink" class="support-inline-link" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Support this tool</a>
-            </div>
+        <article class="subsection fast-answer-card">
+          <div class="answer-head">
+            <span class="pill pill-accent">Fast answer</span>
           </div>
-          <div id="summaryBannerGrid" class="summary-banner-grid" aria-live="polite"></div>
+          <h3 id="fastAnswerTitle">Waiting until 70 may maximize lifetime CPP in this scenario.</h3>
+          <p id="fastAnswerBody" class="lead-copy"></p>
+          <div class="break-even-spotlight">
+            <span class="break-even-label">Break-even age</span>
+            <strong id="primaryBreakEvenValue" class="break-even-value">Age 81</strong>
+            <p id="primaryBreakEvenCopy" class="muted"></p>
+          </div>
+          <div id="strategyChips" class="strategy-chips" aria-live="polite"></div>
+          <p id="fastAnswerCaution" class="muted small-copy"></p>
         </article>
 
         <section class="comparison-section" aria-labelledby="comparisonHeading">
           <div class="section-head">
-            <h3 id="comparisonHeading">CPP at 60, 65, and 70</h3>
-            <p class="muted small-copy">Decision-focused comparison cards.</p>
+            <h3 id="comparisonHeading">Compare 60, 65, and 70</h3>
+            <p class="muted small-copy">Quick side-by-side comparison.</p>
           </div>
           <div id="comparisonGrid" class="comparison-grid" aria-live="polite"></div>
         </section>
 
-        <section class="comparison-section" aria-labelledby="breakEvenHeading">
-          <div class="section-head">
-            <h3 id="breakEvenHeading">Break-even ages</h3>
-            <p class="muted small-copy">A later CPP start only catches up if you live long enough for the higher payment to overtake the earlier payments.</p>
-          </div>
-          <div id="breakEvenGrid" class="break-even-grid" aria-live="polite"></div>
-        </section>
+        <div class="support-inline support-inline-row no-print">
+          <span id="supportMicrocopy" class="support-inline-copy"></span>
+          <a id="supportMicroLink" class="support-inline-link" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Support this tool</a>
+        </div>
 
-        <section class="comparison-section" aria-labelledby="chartHeading">
-          <div class="section-head">
-            <h3 id="chartHeading">Cumulative CPP over time</h3>
-            <p class="muted small-copy">See how each start age adds up over your retirement horizon.</p>
-          </div>
-          <article class="subsection chart-card">
-            <div class="chart-helper">
-              <p class="muted small-copy">This chart shows estimated cumulative CPP received by age. The lines cross at the break-even point, where a later start catches up to an earlier start.</p>
+        <details class="results-more">
+          <summary>Proof: chart and full comparison</summary>
+
+          <section class="comparison-section" aria-labelledby="chartHeading">
+            <div class="section-head">
+              <h3 id="chartHeading">See where a later start catches up</h3>
+              <p class="muted small-copy">This chart shows estimated cumulative CPP received by age.</p>
             </div>
-            <div id="chartLegend" class="chart-legend" aria-hidden="true"></div>
-            <div id="chartContainer" class="chart-container" role="img" aria-label="Cumulative CPP comparison chart"></div>
-            <p id="chartCaption" class="muted small-copy"></p>
-          </article>
-        </section>
+            <article class="subsection chart-card">
+              <p id="chartHelper" class="chart-helper-copy muted small-copy"></p>
+              <div id="chartLegend" class="chart-legend" aria-hidden="true"></div>
+              <div id="chartContainer" class="chart-container" role="img" aria-label="Cumulative CPP comparison chart"></div>
+              <p id="chartCaption" class="muted small-copy"></p>
+            </article>
+          </section>
 
-        <section class="comparison-section" aria-labelledby="insightsHeading">
-          <div class="section-head">
-            <h3 id="insightsHeading">What this means</h3>
-            <p class="muted small-copy">Short planner-style reminders.</p>
-          </div>
-          <div id="insightGrid" class="insight-grid" aria-live="polite"></div>
-        </section>
+          <section class="comparison-section" aria-labelledby="insightsHeading">
+            <div class="section-head">
+              <h3 id="insightsHeading">What this means</h3>
+              <p class="muted small-copy">Plain-English interpretation for everyday planning decisions.</p>
+            </div>
+            <div id="insightGrid" class="insight-grid" aria-live="polite"></div>
+          </section>
+
+          <section class="comparison-section" aria-labelledby="breakEvenHeading">
+            <div class="section-head">
+              <h3 id="breakEvenHeading">All break-even comparisons</h3>
+              <p class="muted small-copy">A later start only catches up if you live long enough for the higher payment to overtake the earlier payments.</p>
+            </div>
+            <div id="breakEvenGrid" class="break-even-grid" aria-live="polite"></div>
+          </section>
+        </details>
       </section>
 
-      <section id="learnPanel" class="panel" aria-labelledby="learnHeading">
-        <div class="panel-header panel-header-tight">
+      <details id="learnPanel" class="panel learn-details" aria-labelledby="learnHeading">
+        <summary class="panel-summary">
           <h2 id="learnHeading">How this works</h2>
-          <p>Short method notes for trust and context.</p>
+          <p>Method notes, trust notes, and the official source.</p>
+        </summary>
+        <div class="learn-stack">
+      <section aria-label="How this works">
+        <div class="panel-header">
+          <h2>How this works</h2>
+          <p>Keep the method simple, so the answer stays easy to trust and understand.</p>
         </div>
-        <div class="content-grid-two content-grid-tight">
+        <div class="content-grid-two">
           <article class="subsection">
             <h3>Method</h3>
             <ul class="content-list">
               <li>Your age-65 amount is the reference CPP benefit.</li>
-              <li>Age 60 and 70 are estimated using standard CPP timing adjustment factors.</li>
+              <li>Age 60 and age 70 are estimated using standard CPP timing adjustment factors.</li>
               <li>Cumulative totals are projected over time to your planning age.</li>
-              <li>Discounted comparisons are scenario-based, using your entered return assumption.</li>
+              <li>Discounted comparisons use your optional return assumption.</li>
             </ul>
           </article>
           <article class="subsection">
             <h3>Trust note</h3>
             <ul class="content-list">
+              <li>Educational estimate only.</li>
               <li>Uses standard CPP timing adjustment assumptions.</li>
-              <li>For your exact entitlement, confirm with Service Canada.</li>
-              <li>Educational estimate, not regulated financial advice.</li>
+              <li>Confirm your exact entitlement with Service Canada.</li>
             </ul>
+            <p class="source-note">
+              Source:
+              <a
+                class="source-link"
+                href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/cpp-benefit/when-start.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Service Canada: When to start your CPP pension</a>
+            </p>
           </article>
         </div>
       </section>
+        </div>
+      </details>
 
-      <section id="faqPanel" class="panel" aria-labelledby="faqHeading">
-        <div class="panel-header panel-header-tight">
+      <details class="panel learn-details" aria-labelledby="faqHeading">
+        <summary class="panel-summary">
           <h2 id="faqHeading">FAQ</h2>
-          <p>Short answers to common CPP timing questions.</p>
+          <p>Common questions about CPP timing.</p>
+        </summary>
+        <div class="learn-stack">
+      <section id="faqPanel" aria-labelledby="faqHeadingContent">
+        <div class="panel-header">
+          <h2 id="faqHeadingContent">FAQ</h2>
+          <p>Short answers to common questions about CPP timing in Canada.</p>
         </div>
         <div class="faq-list">
           <details class="faq-item" open>
             <summary>Should I take CPP at 60, 65, or 70?</summary>
-            <p>It depends on your cash flow needs, health, longevity expectations, and the rest of your retirement income. This calculator helps you compare those tradeoffs under your assumptions.</p>
+            <p>It depends on your cash flow needs, health, longevity expectations, and the rest of your retirement income. This calculator is built to make that comparison easier.</p>
           </details>
           <details class="faq-item">
             <summary>What is the break-even age for delaying CPP?</summary>
-            <p>It is the age when the total received from a later CPP start catches up to an earlier one. If that age is beyond your planning horizon, delaying may not pay off in total dollars under this scenario.</p>
+            <p>The break-even age is when the total received from a later start catches up to the total from an earlier start.</p>
           </details>
           <details class="faq-item">
             <summary>Does delaying CPP always pay off?</summary>
-            <p>No. Delaying raises monthly guaranteed income, but whether it pays off depends on longevity, cash flow needs, and how the rest of your retirement plan is structured.</p>
+            <p>No. Delaying raises your monthly CPP, but it only pays off if you live long enough for the higher payment to catch up.</p>
           </details>
           <details class="faq-item">
             <summary>Is CPP timing enough to decide my retirement plan?</summary>
-            <p>No. CPP is one part of retirement income planning. It should be reviewed with OAS, pensions, RRSP/RRIF withdrawals, tax, and spending needs.</p>
+            <p>No. CPP timing is one part of the broader retirement picture and should be reviewed with OAS, pensions, savings withdrawals, taxes, and spending.</p>
           </details>
           <details class="faq-item">
             <summary>How accurate is this calculator?</summary>
@@ -301,11 +344,19 @@
           </details>
         </div>
       </section>
+        </div>
+      </details>
 
-      <section id="scenarioPanel" class="panel" aria-labelledby="scenarioHeading">
-        <div class="panel-header panel-header-tight">
+      <details class="panel learn-details" aria-labelledby="guidesHeading">
+        <summary class="panel-summary">
+          <h2 id="guidesHeading">CPP timing guides</h2>
+          <p>Scenario walkthroughs and plain-English timing guidance.</p>
+        </summary>
+        <div class="learn-stack">
+      <section id="scenarioPanel" aria-labelledby="scenarioHeading">
+        <div class="panel-header">
           <h2 id="scenarioHeading">Common CPP timing scenarios</h2>
-          <p>Useful context for common Canadian retirement planning decisions.</p>
+          <p>Real-world planning patterns that often shape the 60 vs 65 vs 70 decision.</p>
         </div>
         <div class="scenario-grid">
           <article class="subsection">
@@ -313,75 +364,77 @@
             <p class="muted">An earlier start can help if cash flow matters more than maximizing a later guaranteed cheque. The tradeoff is a permanently lower monthly benefit.</p>
           </article>
           <article class="subsection">
-            <h3>Waiting until 65 for a standard baseline</h3>
-            <p class="muted">Age 65 is the reference point most CPP timing discussions start from. It often feels like a middle ground between access and benefit size.</p>
+            <h3>Waiting until 65 for a balanced baseline</h3>
+            <p class="muted">Age 65 is the standard reference point and a useful middle-ground comparison if you want access without delaying all the way to 70.</p>
           </article>
           <article class="subsection">
-            <h3>Delaying CPP to 70 for higher guaranteed income</h3>
-            <p class="muted">Delaying can make sense when you expect a longer retirement and want more secure income later in life. Break-even age helps show when waiting starts to pay off.</p>
+            <h3>Delaying CPP to 70 for higher later income</h3>
+            <p class="muted">Delaying can make sense when you expect a longer retirement and want more secure guaranteed income later in life.</p>
           </article>
           <article class="subsection">
             <h3>Coordinating CPP with a workplace pension</h3>
-            <p class="muted">If you already have pension income, delaying CPP may increase later guaranteed income without putting immediate cash flow under pressure.</p>
+            <p class="muted">If you already have pension income, delaying CPP may be easier because you have another income source while you wait.</p>
           </article>
           <article class="subsection">
             <h3>Coordinating CPP with RRSP or RRIF withdrawals</h3>
-            <p class="muted">Some retirees bridge early retirement with savings, then delay CPP for a larger lifetime benefit. This should be reviewed alongside tax and withdrawal strategy.</p>
+            <p class="muted">Some retirees bridge early retirement with savings, then delay CPP for a larger lifetime benefit.</p>
           </article>
           <article class="subsection">
             <h3>Why break-even age helps, but is not the whole decision</h3>
-            <p class="muted">Break-even age is useful, but it does not capture tax, health, spending flexibility, survivor needs, or the rest of your retirement income plan.</p>
+            <p class="muted">Break-even age is useful, but it does not fully capture taxes, health, survivor needs, or spending flexibility.</p>
           </article>
         </div>
       </section>
 
-      <section id="startCppPanel" class="panel" aria-labelledby="startCppHeading">
-        <div class="panel-header panel-header-tight">
-          <h2 id="startCppHeading">When Should You Start CPP?</h2>
-          <p>Short guidance for the most common Canadian CPP timing questions.</p>
+      <section id="startCppPanel" aria-labelledby="startCppHeading">
+        <div class="panel-header">
+          <h2 id="startCppHeading">When should you start CPP?</h2>
+          <p>A simple guide to the most common Canadian CPP timing questions.</p>
         </div>
         <div class="scenario-grid">
           <article class="subsection">
             <h3>Taking CPP at 60</h3>
-            <p class="muted">Starting at 60 can be attractive when you want income sooner or expect to rely less on later guaranteed income. The tradeoff is a permanently reduced monthly payment.</p>
+            <p class="muted">Often chosen when earlier income matters most. You start sooner, but your monthly CPP stays permanently lower.</p>
           </article>
           <article class="subsection">
             <h3>Taking CPP at 65</h3>
-            <p class="muted">Age 65 is the baseline reference point for CPP timing comparisons. Many people use it as the default benchmark before deciding whether starting earlier or later is worthwhile.</p>
+            <p class="muted">The baseline reference point. It is often the easiest place to start comparing what earlier or later CPP would mean.</p>
           </article>
           <article class="subsection">
             <h3>Delaying CPP to 70</h3>
-            <p class="muted">Delaying CPP can make sense if you expect a longer retirement and want higher guaranteed income later in life. The key tradeoff is giving up several years of earlier payments.</p>
+            <p class="muted">Best for the highest guaranteed monthly CPP, but only pays off if you live long enough for the larger payment to catch up.</p>
           </article>
           <article class="subsection">
             <h3>When people often choose CPP at 60</h3>
-            <p class="muted">People often choose earlier CPP when cash flow matters now, work stops earlier than planned, or they prefer to take income sooner instead of waiting for a larger later payment.</p>
+            <p class="muted">Earlier retirement, lower savings pressure, or a preference for income sooner are common reasons.</p>
           </article>
           <article class="subsection">
             <h3>When delaying CPP may make sense</h3>
-            <p class="muted">Delaying may be more attractive when you have other income sources such as savings or a pension and want to strengthen guaranteed income later in retirement.</p>
+            <p class="muted">A longer retirement horizon, stronger health expectations, or other income sources while you wait can make delaying more attractive.</p>
           </article>
           <article class="subsection">
-            <h3>Why break-even age is helpful, but not the whole decision</h3>
-            <p class="muted">Break-even age shows when delaying may catch up, but it does not fully capture taxes, health, survivor needs, spending flexibility, or the rest of your retirement plan.</p>
+            <h3>Why break-even age is helpful</h3>
+            <p class="muted">It helps you see when delaying may catch up, but it is still only one piece of the decision.</p>
           </article>
         </div>
       </section>
+        </div>
+      </details>
 
       <section class="panel cta-panel" aria-labelledby="plannerHeading">
-        <div class="panel-header panel-header-tight">
+        <div class="panel-header">
           <h2 id="plannerHeading">More free Canadian retirement tools</h2>
           <p>Use these when you want to go beyond the CPP timing question.</p>
         </div>
         <div class="tool-grid">
           <article class="subsection tool-card">
             <h3>Retirement Planner</h3>
-            <p class="muted">Use this if you want to see CPP alongside pensions, OAS, RRSP/RRIF withdrawals, and spending.</p>
+            <p class="muted">Use this to see CPP alongside OAS, pensions, RRSP/RRIF withdrawals, savings, and spending.</p>
             <a id="plannerResultsLink" class="btn btn-primary" href="https://retirement.simplekit.app/" target="_blank" rel="noopener noreferrer">Open the Retirement Planner</a>
           </article>
           <article class="subsection tool-card">
             <h3>OAS calculator</h3>
-            <p class="muted">Pair CPP timing with Old Age Security planning once this tool is available.</p>
+            <p class="muted">Helpful when you want to compare CPP timing with Old Age Security planning.</p>
             <a class="btn btn-secondary btn-secondary-panel" href="https://retirement.simplekit.app/" target="_blank" rel="noopener noreferrer">See retirement tools</a>
           </article>
           <article class="subsection tool-card">
@@ -393,14 +446,14 @@
       </section>
 
       <section id="supportPanel" class="panel support-panel" aria-labelledby="supportHeading">
-        <div class="panel-header panel-header-tight">
-          <h2 id="supportHeading">Keep these tools free</h2>
-          <p>Support ongoing maintenance and future Canadian planning tools.</p>
+        <div class="panel-header">
+          <h2 id="supportHeading">Support more SimpleKit retirement tools</h2>
+          <p>If this tool helped you understand your CPP decision, there is an optional way to support more free Canadian planning tools.</p>
         </div>
         <div class="support-card support-card-strong">
           <div>
-            <h3>If this helped you understand your CPP decision, support more free Canadian retirement tools.</h3>
-            <p class="muted">This calculator is free to use. Support helps keep SimpleKit tools available, improving, and useful without a paywall.</p>
+            <h3>This calculator is free to use.</h3>
+            <p class="muted">Support helps keep SimpleKit tools available, improving, and useful without a paywall.</p>
           </div>
           <a id="supportLink" class="btn btn-primary" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Buy Me a Coffee</a>
         </div>
@@ -417,11 +470,6 @@
         <a id="footerSupportLink" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>
       </div>
     </footer>
-  </div>
-
-  <div class="global-fab-row no-print" aria-label="Quick actions">
-    <a id="floatingSupportLink" class="global-support-btn" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Support</a>
-    <button id="scrollToResultsBtn" class="global-save-btn" type="button">See results</button>
   </div>
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
