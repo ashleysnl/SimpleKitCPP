@@ -362,16 +362,16 @@ function renderFastAnswer(model) {
   el.primaryBreakEvenCopy.textContent =
     primaryBreakEven.breakEvenAge === null
       ? `The later start does not catch up by age ${CPP_RULES.maxProjectionAge} in this model.`
-      : `The most relevant catch-up point in this scenario is ${primaryBreakEven.earlyAge} vs ${primaryBreakEven.laterAge}.`;
+      : `${primaryBreakEven.laterAge} catches up to ${primaryBreakEven.earlyAge} around ${formatBreakEvenShort(primaryBreakEven)}.`;
 }
 
 function renderDecisionSummary(model) {
   if (!el.decisionSummaryGrid) return;
   const rows = [
     { label: "Highest monthly income", value: `CPP at ${model.highestMonthly.age}` },
-    { label: "Earliest income", value: `CPP at ${model.earliestIncome.age}` },
-    { label: "Best if longevity matters", value: "CPP at 70" },
-    { label: "Best if cash flow now matters", value: "CPP at 60" },
+    { label: "Income soonest", value: `CPP at ${model.earliestIncome.age}` },
+    { label: "Standard baseline", value: "CPP at 65" },
+    { label: "Break-even in this scenario", value: formatBreakEvenShort(model.primaryBreakEven) },
   ];
 
   el.decisionSummaryGrid.innerHTML = rows

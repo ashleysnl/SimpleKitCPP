@@ -208,6 +208,15 @@ a {
   gap: 12px;
 }
 
+.calculator-orientation {
+  display: grid;
+  gap: 3px;
+}
+
+.calculator-orientation strong {
+  font-size: 0.9rem;
+}
+
 .comparison-strip,
 .strategy-chips {
   display: flex;
