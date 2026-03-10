@@ -217,6 +217,12 @@ a {
   font-size: 0.9rem;
 }
 
+.calculator-emphasis {
+  margin: -2px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
 .comparison-strip,
 .strategy-chips {
   display: flex;
@@ -572,6 +578,8 @@ summary:focus,
 .panel-summary p {
   margin-top: 4px;
   color: var(--muted);
+  max-width: 60ch;
+  line-height: 1.35;
 }
 
 .learn-stack {
@@ -592,6 +600,7 @@ summary:focus,
 
 .summary-card {
   background: linear-gradient(180deg, #fff, #fbfdff);
+  min-height: 88px;
 }
 
 .summary-card span,
@@ -981,6 +990,10 @@ summary:focus,
 
   .field-actions {
     gap: 6px;
+  }
+
+  .calculator-emphasis {
+    font-size: 0.8rem;
   }
 
   .support-inline-row > div {

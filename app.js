@@ -339,14 +339,14 @@ function renderFastAnswer(model) {
       ? "Waiting until 70 may maximize lifetime CPP in this scenario."
       : winner.age === 60
         ? "Starting CPP at 60 may make more sense in this scenario."
-        : "Starting CPP at 65 looks like the middle-ground fit in this scenario.";
+        : "Starting CPP at 65 may be the standard-fit option in this scenario.";
 
   el.fastAnswerBody.textContent =
     winner.age === 70
       ? "Waiting until 70 may maximize lifetime CPP in this scenario."
       : winner.age === 60
         ? "Starting CPP at 60 may make more sense if getting income sooner matters most."
-        : "Starting CPP at 65 can be a balanced middle-ground in this scenario.";
+        : "Starting CPP at 65 can be a practical middle-ground in this scenario.";
 
   el.fastAnswerWhy.textContent =
     winner.age === 70
@@ -560,12 +560,12 @@ function renderBreakEvenCards(model) {
 function getScenarioLabel(age) {
   if (age === 60) return "Income sooner";
   if (age === 70) return "Highest later income";
-  return "Balanced baseline";
+  return "Standard baseline";
 }
 
 function getScenarioInterpretation(age) {
   if (age === 60) return "Income sooner, lower for life.";
-  if (age === 65) return "Balanced baseline option.";
+  if (age === 65) return "Standard baseline option.";
   return "Higher later income.";
 }
 
@@ -577,8 +577,8 @@ function ageToBestFitKey(age) {
 
 function getScenarioBestFit(ageKey) {
   if (ageKey === "60") return "Best fit: People who want income sooner or need cash flow now.";
-  if (ageKey === "65") return "Best fit: People who want the standard reference point.";
-  return "Best fit: People with other income sources who want more guaranteed income later.";
+  if (ageKey === "65") return "Best fit: People who want the standard comparison point.";
+  return "Best fit: People with other income sources while they wait.";
 }
 
 function renderValidationNote() {
