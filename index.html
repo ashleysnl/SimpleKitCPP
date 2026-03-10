@@ -6,28 +6,28 @@
   <meta
     id="metaDescription"
     name="description"
-    content="CPP Timing Calculator Canada: compare CPP at 60 vs 65 vs 70, see break-even age, lifetime payout differences, and when delaying CPP may pay off."
+    content="Compare taking CPP at 60, 65, or 70, estimate break-even age, and understand how delaying CPP may affect lifetime retirement income."
   />
   <meta id="metaThemeColor" name="theme-color" content="#0f6abf" />
   <meta property="og:type" content="website" />
-  <meta id="metaOgTitle" property="og:title" content="CPP Timing Calculator Canada: Compare 60 vs 65 vs 70" />
+  <meta id="metaOgTitle" property="og:title" content="CPP Timing Calculator Canada: Compare CPP at 60, 65, and 70" />
   <meta
     id="metaOgDescription"
     property="og:description"
-    content="Compare taking CPP at 60, 65, or 70, see break-even age, and understand when delaying CPP may pay off in Canada."
+    content="Compare taking CPP at 60, 65, or 70, estimate break-even age, and understand how delaying CPP may affect lifetime retirement income."
   />
   <meta id="metaOgUrl" property="og:url" content="https://retirement.simplekit.app/cpp-timing-calculator/" />
   <meta id="metaOgImage" property="og:image" content="https://retirement.simplekit.app/social-preview.png" />
   <meta id="metaOgSiteName" property="og:site_name" content="CPP Timing Calculator Canada" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta id="metaTwitterTitle" name="twitter:title" content="CPP Timing Calculator Canada: Compare 60 vs 65 vs 70" />
+  <meta id="metaTwitterTitle" name="twitter:title" content="CPP Timing Calculator Canada: Compare CPP at 60, 65, and 70" />
   <meta
     id="metaTwitterDescription"
     name="twitter:description"
-    content="Use this Canadian CPP timing calculator to compare CPP at 60, 65, and 70, break-even age, and lifetime payout tradeoffs."
+    content="Compare taking CPP at 60, 65, or 70, estimate break-even age, and understand how delaying CPP may affect lifetime retirement income."
   />
   <meta id="metaTwitterImage" name="twitter:image" content="https://retirement.simplekit.app/social-preview.png" />
-  <title>CPP Timing Calculator Canada: Compare 60 vs 65 vs 70</title>
+  <title>CPP Timing Calculator Canada: Compare CPP at 60, 65, and 70</title>
   <link rel="canonical" href="https://retirement.simplekit.app/cpp-timing-calculator/" />
   <link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
   <link rel="shortcut icon" href="icons/favicon.svg" />
@@ -96,16 +96,17 @@
     <header class="hero" aria-labelledby="heroTitle">
       <div class="hero-copy">
         <h1 id="heroTitle">CPP Timing Calculator Canada</h1>
-        <p class="hero-subtitle">Should you take CPP at 60, 65, or 70? Compare your monthly income, lifetime totals, and break-even age in minutes.</p>
-        <div class="hero-benefits" aria-label="What this calculator helps with">
-          <span>Compare 60, 65, and 70</span>
-          <span>Spot the break-even age</span>
+        <p class="hero-subtitle">Compare CPP at 60, 65, and 70, see break-even age, and understand when delaying may pay off.</p>
+        <div class="hero-benefits" aria-label="Trust highlights">
+          <span>Free to use</span>
+          <span>No sign-up</span>
+          <span>Educational estimate for Canadians</span>
         </div>
         <div class="hero-actions no-print">
-          <button id="jumpToCalculatorBtn" class="btn btn-primary" type="button">Calculate My CPP Strategy</button>
+          <button id="jumpToCalculatorBtn" class="btn btn-primary" type="button">Start your comparison</button>
         </div>
         <p class="hero-trust-inline">
-          Educational estimate only. Not a Service Canada quote.
+          Not a Service Canada quote. Built for planning and education.
           <a
             class="source-link source-link-light"
             href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/cpp-benefit/when-start.html"
@@ -134,21 +135,23 @@
             <label class="form-field">
               <span>Monthly CPP at age 65</span>
               <input id="monthlyAt65" name="monthlyAt65" type="number" min="0" max="5000" step="1" inputmode="decimal" />
-              <small>Use your estimated age-65 CPP as your baseline.</small>
+              <small>Use your estimated monthly CPP if you started at 65.</small>
               <span class="field-actions no-print">
-                <button id="tryExampleBtn" class="text-link-btn" type="button">Try example</button>
-                <span class="muted small-copy">Example: $1,200 at 65</span>
+                <button id="tryExampleBtn" class="text-link-btn" type="button">Use realistic example</button>
+                <span class="muted small-copy">Helpful if you want a quick starting point.</span>
               </span>
             </label>
 
             <label class="form-field">
               <span>Planning age</span>
               <input id="lifeExpectancy" name="lifeExpectancy" type="number" min="60" max="105" step="1" inputmode="numeric" />
-              <small>We compare total CPP up to this age.</small>
+              <small>How long do you want to compare lifetime CPP income for?</small>
             </label>
 
+            <p id="validationNote" class="validation-note muted small-copy" aria-live="polite"></p>
+
             <p class="quick-start-note">
-              Uses standard CPP timing assumptions. Planning estimate only.
+              Built for Canadian retirement planning. Uses standard CPP timing assumptions.
               <a
                 class="source-link"
                 href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/cpp-benefit/when-start.html"
@@ -173,25 +176,25 @@
                 <label class="form-field">
                   <span>Return / discount rate (%)</span>
                   <input id="annualReturn" name="annualReturn" type="number" min="0" max="12" step="0.1" inputmode="decimal" />
-                  <small>Used for present-value style comparisons.</small>
+                  <small>Optional. Used to compare money received earlier vs later.</small>
                 </label>
 
                 <label class="form-field">
                   <span>Inflation (%)</span>
                   <input id="inflationRate" name="inflationRate" type="number" min="0" max="8" step="0.1" inputmode="decimal" />
-                  <small>Helps show real-return context.</small>
+                  <small>Optional. Helps give extra context for today's dollars.</small>
                 </label>
 
                 <label class="form-field">
                   <span>Comparison age 1</span>
                   <input id="comparisonAgeOne" name="comparisonAgeOne" type="number" min="60" max="105" step="1" inputmode="numeric" />
-                  <small>Optional checkpoint for total CPP.</small>
+                  <small>Optional checkpoint for side-by-side total CPP.</small>
                 </label>
 
                 <label class="form-field">
                   <span>Comparison age 2</span>
                   <input id="comparisonAgeTwo" name="comparisonAgeTwo" type="number" min="60" max="105" step="1" inputmode="numeric" />
-                  <small>Second optional checkpoint.</small>
+                  <small>Optional checkpoint for side-by-side total CPP.</small>
                 </label>
               </div>
             </details>
@@ -211,14 +214,22 @@
           </div>
           <h3 id="fastAnswerTitle">Waiting until 70 may maximize lifetime CPP in this scenario.</h3>
           <p id="fastAnswerBody" class="lead-copy"></p>
+          <p id="fastAnswerWhy" class="answer-why muted"></p>
           <div class="break-even-spotlight">
             <span class="break-even-label">Break-even age</span>
             <strong id="primaryBreakEvenValue" class="break-even-value">Age 81</strong>
             <p id="primaryBreakEvenCopy" class="muted"></p>
           </div>
-          <div id="strategyChips" class="strategy-chips" aria-live="polite"></div>
           <p id="fastAnswerCaution" class="muted small-copy"></p>
         </article>
+
+        <section class="comparison-section" aria-labelledby="decisionSummaryHeading">
+          <div class="section-head">
+            <h3 id="decisionSummaryHeading">At-a-glance decision summary</h3>
+            <p class="muted small-copy">Quick scan for the main tradeoffs.</p>
+          </div>
+          <div id="decisionSummaryGrid" class="decision-summary-grid" aria-live="polite"></div>
+        </section>
 
         <section class="comparison-section" aria-labelledby="comparisonHeading">
           <div class="section-head">
@@ -229,7 +240,10 @@
         </section>
 
         <div class="support-inline support-inline-row no-print">
-          <span id="supportMicrocopy" class="support-inline-copy"></span>
+          <div>
+            <strong class="support-inline-title">Was this helpful?</strong>
+            <span id="supportMicrocopy" class="support-inline-copy"></span>
+          </div>
           <a id="supportMicroLink" class="support-inline-link" href="https://buymeacoffee.com/ashleysnl" target="_blank" rel="noopener noreferrer">☕ Support this tool</a>
         </div>
 
@@ -239,7 +253,7 @@
           <section class="comparison-section" aria-labelledby="chartHeading">
             <div class="section-head">
               <h3 id="chartHeading">See where a later start catches up</h3>
-              <p class="muted small-copy">This chart shows estimated cumulative CPP received by age.</p>
+              <p class="muted small-copy">This chart shows estimated cumulative CPP received by age. The lines cross at the break-even point.</p>
             </div>
             <article class="subsection chart-card">
               <p id="chartHelper" class="chart-helper-copy muted small-copy"></p>

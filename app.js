@@ -1,8 +1,8 @@
 const TEMPLATE = {
   storageKey: "simplekit.cppTimingCalculator.v1",
-  appName: "CPP Timing Calculator Canada: Compare 60 vs 65 vs 70",
+  appName: "CPP Timing Calculator Canada: Compare CPP at 60, 65, and 70",
   seoDescription:
-    "CPP Timing Calculator Canada: compare CPP at 60 vs 65 vs 70, see break-even age, lifetime payout differences, and when delaying CPP may pay off.",
+    "Compare taking CPP at 60, 65, or 70, estimate break-even age, and understand how delaying CPP may affect lifetime retirement income.",
   siteUrl: "https://retirement.simplekit.app/cpp-timing-calculator/",
   socialImageUrl: "https://retirement.simplekit.app/social-preview.png",
   supportUrl: "https://buymeacoffee.com/ashleysnl",
@@ -63,11 +63,13 @@ const el = {
   comparisonAgeTwo: document.getElementById("comparisonAgeTwo"),
   tryExampleBtn: document.getElementById("tryExampleBtn"),
   resetDefaultsBtn: document.getElementById("resetDefaultsBtn"),
+  validationNote: document.getElementById("validationNote"),
 
   fastAnswerTitle: document.getElementById("fastAnswerTitle"),
   fastAnswerBody: document.getElementById("fastAnswerBody"),
+  fastAnswerWhy: document.getElementById("fastAnswerWhy"),
   fastAnswerCaution: document.getElementById("fastAnswerCaution"),
-  strategyChips: document.getElementById("strategyChips"),
+  decisionSummaryGrid: document.getElementById("decisionSummaryGrid"),
   primaryBreakEvenValue: document.getElementById("primaryBreakEvenValue"),
   primaryBreakEvenCopy: document.getElementById("primaryBreakEvenCopy"),
   supportMicrocopy: document.getElementById("supportMicrocopy"),
@@ -96,6 +98,7 @@ function init() {
   syncHeadMeta();
   syncStaticLinks();
   populateForm();
+  renderValidationNote();
   bindEvents();
   render();
 }
@@ -132,6 +135,7 @@ function bindEvents() {
 function handleCompareSubmit(event) {
   event.preventDefault();
   syncStateFromForm();
+  renderValidationNote();
   render();
   scrollToSection("resultsPanel");
   toast("Results updated");
@@ -139,6 +143,7 @@ function handleCompareSubmit(event) {
 
 function handleLiveInput() {
   syncStateFromForm();
+  renderValidationNote();
   render();
 }
 
@@ -192,6 +197,7 @@ function populateForm() {
 function render() {
   const model = calculateModel(state);
   renderFastAnswer(model);
+  renderDecisionSummary(model);
   renderComparisonCards(model);
   renderChart(model);
   renderInsights(model);
@@ -337,24 +343,47 @@ function renderFastAnswer(model) {
 
   el.fastAnswerBody.textContent =
     winner.age === 70
-      ? `Delaying gives up earlier payments, but may pay off if you expect a longer retirement. Best lifetime value by age ${model.inputs.lifeExpectancy}: CPP at 70.`
+      ? "Waiting until 70 may maximize lifetime CPP in this scenario."
       : winner.age === 60
-        ? `Starting earlier gives you income sooner, and CPP at 60 stays ahead by age ${model.inputs.lifeExpectancy} in this scenario.`
-        : `Age 65 is the balanced middle-ground option here, while CPP at ${model.highestMonthly.age} still gives the highest monthly income.`;
+        ? "Starting CPP at 60 may make more sense if getting income sooner matters most."
+        : "Starting CPP at 65 can be a balanced middle-ground in this scenario.";
+
+  el.fastAnswerWhy.textContent =
+    winner.age === 70
+      ? `The higher monthly CPP may pay off if you expect a longer retirement, with the strongest total by age ${model.inputs.lifeExpectancy}.`
+      : winner.age === 60
+        ? `It gives you income sooner, and in this scenario CPP at 60 still stays ahead by age ${model.inputs.lifeExpectancy}.`
+        : `It splits the difference between earlier access and a higher later benefit.`;
 
   el.fastAnswerCaution.textContent = "Planning estimate only. Confirm your exact CPP amount with Service Canada.";
-  el.supportMicrocopy.textContent = "Helpful? Support more free Canadian retirement tools.";
-
-  el.strategyChips.innerHTML = [
-    strategyChip("Best monthly income", `CPP at ${model.highestMonthly.age}`),
-    strategyChip("Best lifetime value", `CPP at ${winner.age}`),
-  ].join("");
+  el.supportMicrocopy.textContent = "I build free Canadian planning tools like this. Support helps keep them free and improving.";
 
   el.primaryBreakEvenValue.textContent = formatBreakEvenShort(primaryBreakEven);
   el.primaryBreakEvenCopy.textContent =
     primaryBreakEven.breakEvenAge === null
       ? `The later start does not catch up by age ${CPP_RULES.maxProjectionAge} in this model.`
       : `The most relevant catch-up point in this scenario is ${primaryBreakEven.earlyAge} vs ${primaryBreakEven.laterAge}.`;
+}
+
+function renderDecisionSummary(model) {
+  if (!el.decisionSummaryGrid) return;
+  const rows = [
+    { label: "Highest monthly income", value: `CPP at ${model.highestMonthly.age}` },
+    { label: "Earliest income", value: `CPP at ${model.earliestIncome.age}` },
+    { label: "Best if longevity matters", value: "CPP at 70" },
+    { label: "Best if cash flow now matters", value: "CPP at 60" },
+  ];
+
+  el.decisionSummaryGrid.innerHTML = rows
+    .map(
+      (row) => `
+        <article class="summary-card">
+          <span>${escapeHtml(row.label)}</span>
+          <strong>${escapeHtml(row.value)}</strong>
+        </article>
+      `,
+    )
+    .join("");
 }
 
 function renderComparisonCards(model) {
@@ -376,11 +405,16 @@ function renderComparisonCards(model) {
           <p class="scenario-monthly">${escapeHtml(formatCurrency(scenario.monthlyPayment))} <span>/ month</span></p>
           <div class="metric-stack">
             <div class="metric-stack-row">
+              <span>Monthly CPP</span>
+              <span>${escapeHtml(formatCurrency(scenario.monthlyPayment))}</span>
+            </div>
+            <div class="metric-stack-row">
               <span>Total by age ${escapeHtml(String(model.inputs.lifeExpectancy))}</span>
               <span>${escapeHtml(formatCurrency(scenario.lifetimeTotal))}</span>
             </div>
           </div>
           <p class="scenario-take">${escapeHtml(scenario.interpretation)}</p>
+          <p class="scenario-fit muted small-copy">${escapeHtml(getScenarioBestFit(ageToBestFitKey(scenario.age)))}</p>
         </article>
       `;
     })
@@ -504,7 +538,7 @@ function renderBreakEvenCards(model) {
       const headline =
         pair.breakEvenAge === null
           ? `CPP at ${pair.laterAge} does not catch CPP at ${pair.earlyAge} by age ${CPP_RULES.maxProjectionAge}.`
-          : `CPP at ${pair.laterAge} catches CPP at ${pair.earlyAge} around age ${roundTo(pair.breakEvenAge, 1)}.`;
+          : `${pair.laterAge} catches up to ${pair.earlyAge} around age ${roundTo(pair.breakEvenAge, 1)}.`;
       const body =
         pair.breakEvenAge === null
           ? "In this model, the earlier start stays ahead through the projection horizon."
@@ -523,10 +557,6 @@ function renderBreakEvenCards(model) {
     .join("");
 }
 
-function strategyChip(label, value) {
-  return `<span class="strategy-chip">${escapeHtml(label)}: ${escapeHtml(value)}</span>`;
-}
-
 function getScenarioLabel(age) {
   if (age === 60) return "Income sooner";
   if (age === 70) return "Highest later income";
@@ -537,6 +567,31 @@ function getScenarioInterpretation(age) {
   if (age === 60) return "Income sooner, lower for life.";
   if (age === 65) return "Balanced baseline option.";
   return "Higher later income.";
+}
+
+function ageToBestFitKey(age) {
+  if (age === 60) return "60";
+  if (age === 65) return "65";
+  return "70";
+}
+
+function getScenarioBestFit(ageKey) {
+  if (ageKey === "60") return "Best fit: People who want income sooner or need cash flow now.";
+  if (ageKey === "65") return "Best fit: People who want the standard reference point.";
+  return "Best fit: People with other income sources who want more guaranteed income later.";
+}
+
+function renderValidationNote() {
+  if (!el.validationNote) return;
+  if (state.monthlyAt65 <= 0) {
+    el.validationNote.textContent = "Add your estimated age-65 CPP amount to see a realistic comparison.";
+    return;
+  }
+  if (state.lifeExpectancy < 65) {
+    el.validationNote.textContent = "A planning age below 65 is allowed, but most people compare a longer retirement horizon.";
+    return;
+  }
+  el.validationNote.textContent = "Example values are already loaded, so you can adjust from there rather than start from blank.";
 }
 
 function syncHeadMeta() {

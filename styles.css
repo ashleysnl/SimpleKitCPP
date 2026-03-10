@@ -63,6 +63,7 @@ a {
   display: grid;
   gap: 8px;
   align-content: start;
+  max-width: 760px;
 }
 
 .hero h1 {
@@ -75,13 +76,15 @@ a {
 .hero-subtitle {
   margin: 0;
   font-weight: 700;
-  max-width: 54ch;
+  max-width: 46ch;
+  line-height: 1.2;
 }
 
 .hero-benefits {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
   gap: 6px;
+  align-items: start;
 }
 
 .hero-benefits span {
@@ -102,6 +105,8 @@ a {
   margin: 0;
   font-size: 0.82rem;
   opacity: 0.92;
+  max-width: 60ch;
+  line-height: 1.35;
 }
 
 .source-link {
@@ -188,6 +193,8 @@ a {
 .panel-header p {
   margin: 3px 0 0;
   color: var(--muted);
+  max-width: 62ch;
+  line-height: 1.35;
 }
 
 .quick-start-shell {
@@ -249,6 +256,12 @@ a {
   margin: -2px 0 0;
   color: #425166;
   font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.validation-note {
+  margin: -2px 0 0;
+  min-height: 1.2em;
 }
 
 .form-field {
@@ -361,6 +374,7 @@ summary:focus,
   font-size: 1.42rem;
   line-height: 1.08;
   margin: 0;
+  max-width: 28ch;
 }
 
 .lead-copy,
@@ -378,6 +392,13 @@ summary:focus,
 .lead-copy {
   font-size: 0.95rem;
   color: #24364d;
+  line-height: 1.4;
+}
+
+.answer-why {
+  margin: -2px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.4;
 }
 
 .break-even-spotlight {
@@ -415,12 +436,21 @@ summary:focus,
 
 .support-inline-row {
   justify-content: space-between;
-  padding: 2px 0 0;
+  padding: 10px 0 0;
+  margin-top: 10px;
+  border-top: 1px solid rgba(15, 106, 191, 0.08);
+}
+
+.support-inline-title {
+  display: block;
+  margin-bottom: 2px;
 }
 
 .support-inline-copy {
   font-size: 0.84rem;
   color: #8c4700;
+  line-height: 1.35;
+  max-width: 48ch;
 }
 
 .support-inline-link {
@@ -478,7 +508,12 @@ summary:focus,
   margin: 0;
 }
 
+.section-head p {
+  text-align: right;
+}
+
 .comparison-grid,
+.decision-summary-grid,
 .insight-grid,
 .break-even-grid,
 .scenario-grid,
@@ -490,6 +525,10 @@ summary:focus,
 
 .comparison-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.decision-summary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .insight-grid {
@@ -533,12 +572,33 @@ summary:focus,
 }
 
 .result-card,
+.summary-card,
 .insight-card,
 .break-even-card {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #fff;
   padding: 12px;
+}
+
+.summary-card {
+  background: linear-gradient(180deg, #fff, #fbfdff);
+}
+
+.summary-card span,
+.summary-card strong {
+  display: block;
+}
+
+.summary-card span {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.summary-card strong {
+  margin-top: 3px;
+  font-size: 0.95rem;
+  line-height: 1.25;
 }
 
 .result-card.is-recommended {
@@ -617,12 +677,18 @@ summary:focus,
   font-size: 0.8rem;
 }
 
+.scenario-fit {
+  margin: 6px 0 0;
+  line-height: 1.35;
+}
+
 .chart-card {
   overflow: hidden;
 }
 
 .chart-helper-copy {
   margin: 0 0 8px;
+  line-height: 1.35;
 }
 
 .chart-legend {
@@ -723,6 +789,7 @@ summary:focus,
 .faq-item p {
   margin: 8px 0 0;
   color: #334155;
+  line-height: 1.45;
 }
 
 .scenario-grid .subsection,
@@ -829,6 +896,7 @@ summary:focus,
 
 @media (max-width: 900px) {
   .comparison-grid,
+  .decision-summary-grid,
   .insight-grid,
   .advanced-grid {
     grid-template-columns: 1fr 1fr;
@@ -852,7 +920,20 @@ summary:focus,
     border-radius: 16px;
   }
 
+  .hero h1 {
+    font-size: clamp(1.72rem, 9vw, 2.2rem);
+  }
+
+  .hero-subtitle {
+    max-width: 100%;
+  }
+
+  .hero-benefits {
+    grid-template-columns: 1fr;
+  }
+
   .comparison-grid,
+  .decision-summary-grid,
   .insight-grid,
   .break-even-grid,
   .scenario-grid,
@@ -866,6 +947,10 @@ summary:focus,
   .app-footer {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .section-head p {
+    text-align: left;
   }
 
   .hero-benefits span,
@@ -885,12 +970,24 @@ summary:focus,
     width: 100%;
   }
 
+  .field-actions {
+    gap: 6px;
+  }
+
+  .support-inline-row > div {
+    width: 100%;
+  }
+
   .support-inline-link {
     width: 100%;
   }
 
   .scenario-monthly {
     font-size: 1.55rem;
+  }
+
+  .fast-answer-card h3 {
+    max-width: 100%;
   }
 }
 
