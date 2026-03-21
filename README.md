@@ -1,114 +1,80 @@
-# TravelPlanner
+# SimpleKit Starter (Local-First Web App Template)
 
-Plan your trip, track your budget, and manage your itinerary — private, simple, and offline. No account required.
+A copy-and-customize starter for building polished static web apps with the same look/feel patterns as your current app:
 
-A local-first travel planning app for itinerary building, budget tracking, and printable trip summaries that runs entirely in your browser.
+- bold gradient hero
+- support / Buy Me a Coffee links
+- global save button with dirty state
+- tabs + card UI
+- local-first storage (`localStorage`)
+- JSON export/import backups
+- `sitemap.xml` + `robots.txt` SEO starters
+- `manifest.webmanifest` PWA/app install starter
+- Open Graph + Twitter social meta tags in `index.html`
+- `/icons` SVG icon sources + PNG generation instructions
 
-## Try It Now
+No framework, no build step, no login.
 
-- Live demo (GitHub Pages): [https://ashleysnl.github.io/TravelPlanner/](https://ashleysnl.github.io/TravelPlanner/)
-- If the demo link is not live yet, enable GitHub Pages (steps in [Deployment](#deployment)) and GitHub will publish the app at the URL above.
+## What This Template Includes
 
-## Buy Me a Coffee
-
-[![Buy Me a Coffee](https://img.shields.io/badge/☕%20Buy%20me%20a%20coffee-Support-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/ashleysnl)
-
-Plain link: https://buymeacoffee.com/ashleysnl
-
-## Why TravelPlanner
-
-- No login / no account required
-- Offline / local-first (browser storage)
-- Privacy-first (no tracking, no analytics, no cloud dependency)
-- Simple to use and fast to start
-- Works on desktop and mobile
-- Printable trip summary for sharing as PDF
-
-## Screenshots
-
-### Dashboard
-
-![TravelPlanner Dashboard](assets/screenshots/dashboard-overview.svg)
-
-### Budget Tracking
-
-![TravelPlanner Budget Breakdown](assets/screenshots/budget-breakdown.svg)
-
-### Itinerary Builder
-
-![TravelPlanner Itinerary Builder](assets/screenshots/itinerary-builder.svg)
-
-### Mobile View
-
-![TravelPlanner Mobile Experience](assets/screenshots/mobile-dashboard.svg)
+- `index.html`: Reusable layout shell (hero, snapshot, dashboard, workspace, settings, export/import, modal)
+- `styles.css`: Design system + reusable component styles (buttons, cards, tabs, forms, pills, progress bars)
+- `app.js`: Generic item list logic, branding/theme settings, local save/export/import, modal + toast interactions
+- `sitemap.xml`: XML sitemap starter (replace `https://example.com/` with your real domain)
+- `robots.txt`: Robots rules + sitemap reference (replace `https://example.com/sitemap.xml`)
+- `manifest.webmanifest`: PWA/app metadata starter (replace app text/colors and add real icon files)
+- `icons/README.md`: How to generate `icon-192.png`, `icon-512.png`, and `apple-touch-icon.png`
 
 ## Quick Start
 
-### Local (no npm required)
+1. Copy this folder for a new project.
+2. Open `index.html` in a browser.
+3. Go to the `Settings` tab and customize app name, support URL, and colors.
+4. Replace the starter list/item model in `app.js` with your own domain data.
+5. Update `https://example.com` in `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/sitemap.xml` and `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/robots.txt`.
+6. Update Open Graph/Twitter placeholders in `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/index.html` (`og:url`, `og:image`, `twitter:image`).
+7. Add actual icon files for `/icons/icon-192.png` and `/icons/icon-512.png` (or change the paths) for `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/manifest.webmanifest`.
+8. Generate `icons/apple-touch-icon.png` (the HTML includes the tag already).
 
-1. Download or clone this repo.
-2. Open `index.html` in your browser.
-3. Start planning immediately. Data is stored locally in your browser.
+## Where To Customize First
 
-Optional local server (useful for iPhone testing on your network):
+- Branding defaults: `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/app.js` (`TEMPLATE.brand`)
+- Theme colors: `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/app.js` (`TEMPLATE.theme`)
+- Demo state: `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/app.js` (`DEMO_STATE`)
+- Layout sections: `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/index.html`
+- Component styles: `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/styles.css`
 
-```bash
-cd "TravelPlanner"
-python3 -m http.server 8000 --bind 0.0.0.0
-```
+## Template Patterns You Can Reuse In Other Apps
 
-Then open `http://localhost:8000` (or your Mac's LAN IP on iPhone/iPad).
+- `markDirty()` + global save button badge for explicit save UX
+- `exportJson()` / import file flow for local backups
+- tab navigation (`data-tab-target` / `data-tab-panel`)
+- modal open/close pattern
+- toast notifications for user feedback
+- CSS variables (`--brand`, `--brand-2`) for runtime theming
+- live `<head>` meta updates from the `Settings` tab (useful for branding preview while building)
 
-## Deployment
+## Adapting The Data Model
 
-### GitHub Pages (recommended)
+The starter currently tracks generic `items` with:
 
-1. Push this repo to GitHub (branch: `main`).
-2. Open your GitHub repository settings.
-3. Go to `Settings` -> `Pages`.
-4. Under **Build and deployment**, set:
-   - **Source**: `Deploy from a branch`
-   - **Branch**: `main` / `/ (root)`
-5. Save.
-6. Wait for the GitHub Pages deployment to finish.
-7. Your live app URL will be:
-   - `https://ashleysnl.github.io/TravelPlanner/`
+- `title`
+- `status`
+- `priority`
+- `tag`
+- `notes`
 
-## GitHub Optimization (Suggested)
+To adapt it:
 
-### Repository description (copy/paste suggestion)
+1. Change `DEMO_STATE.items` shape in `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/app.js`.
+2. Update `normalizeItem()`.
+3. Update `renderWorkspaceList()` + `renderStarterList()`.
+4. Update `getSummary()` metrics to match your app.
 
-`Offline travel planner, itinerary manager, and trip budget tracker. No login. Privacy-first. Static web app.`
+## Notes
 
-### Suggested topics
-
-`travel`, `itinerary`, `budget`, `offline`, `localstorage`, `javascript`, `webapp`, `planner`, `privacy`, `trip-planner`
-
-## Data & Privacy
-
-- Data is stored in browser `localStorage` on your device
-- JSON backup export/import is included for manual backups and device transfers
-- No login, no tracking, no account, no backend
-
-## Star the Repo
-
-If TravelPlanner was useful, please star the repo so more people can find it.
-
-## Support
-
-If this saved you from building a spreadsheet, consider supporting it ☕
-
-- Buy Me a Coffee: https://buymeacoffee.com/ashleysnl
-
-## More Tools
-
-Other tools (coming soon):
-
-- Budget helpers (coming soon)
-- Family planning templates (coming soon)
-- Printable trackers (coming soon)
-- Travel checklists (coming soon)
-
-## License
-
-MIT License. See [LICENSE](LICENSE).
+- Data is stored locally in the browser under `simplekitStarter.template.v1`.
+- Export/import uses plain JSON for portability.
+- This is intentionally framework-free so it is easy to copy into new projects.
+- Social/SEO tags are starter placeholders and should be changed before production deploy.
+- Favicon/PWA icon PNG files are not auto-generated; use `/Users/AshleySkinner/Documents/00_Engineering/04_Code/00_Simplekit Template/icons/README.md`.
