@@ -1,0 +1,25 @@
+/* Age selection and CPP start-age scenarios stay together; decision comparisons remain below the inputs. */
+.sk-v2[data-v2-calculator="cpp-calculator"] {
+  --accent:var(--v2-teal);
+  --brand:var(--v2-blue);
+  --brand-2:var(--v2-teal);
+  --ink:var(--v2-navy);
+  --line:var(--v2-border);
+  --muted:var(--v2-slate);
+  --shadow:var(--v2-shadow-soft);
+}
+.sk-v2[data-v2-calculator="cpp-calculator"] .v2c-main { row-gap:1.25rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .calculator-form { gap:1.25rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .decision-summary-grid,.sk-v2[data-v2-calculator="cpp-calculator"] .comparison-grid { gap:.75rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .calculator-form > .form-actions { grid-column:1 / -1; }
+@media(min-width:64rem) {
+ .sk-v2[data-v2-calculator="cpp-calculator"] .calculator-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; }
+}
+@media(max-width:63.99rem) {
+ .sk-v2[data-v2-calculator="cpp-calculator"] .calculator-form { grid-template-columns:minmax(0,1fr); }
+ .sk-v2[data-v2-calculator="cpp-calculator"] .summary-card-sticky { position:static; }
+}
+@media(max-width:47.99rem) {
+ .sk-v2[data-v2-calculator="cpp-calculator"] :where(.form-grid,.field-grid,.advanced-grid,.input-grid,.salary-grid,.calculator-grid,.group-grid,.hero-grid,.settings-inline-grid) { grid-template-columns:minmax(0,1fr); }
+ .sk-v2[data-v2-calculator="cpp-calculator"] :where(.form-actions,.toolbar-actions,.action-group,.wizard-actions,.backup-actions) { flex-wrap:wrap; }
+}
