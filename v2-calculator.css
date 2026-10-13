@@ -23,3 +23,17 @@
  .sk-v2[data-v2-calculator="cpp-calculator"] :where(.form-grid,.field-grid,.advanced-grid,.input-grid,.salary-grid,.calculator-grid,.group-grid,.hero-grid,.settings-inline-grid) { grid-template-columns:minmax(0,1fr); }
  .sk-v2[data-v2-calculator="cpp-calculator"] :where(.form-actions,.toolbar-actions,.action-group,.wizard-actions,.backup-actions) { flex-wrap:wrap; }
 }
+
+/* Phase 15B: compact task introduction and a field-oriented comparison form. */
+.sk-v2[data-v2-calculator="cpp-calculator"] .v2c-hero { background:transparent; border:0; padding:0; margin:.75rem 0 1.25rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .hero-subtitle { font-size:1rem; font-weight:400; max-width:65ch; margin-top:.75rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .hero-trust-inline { color:var(--v2-slate); margin-top:.75rem; font-size:.8125rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .quick-start-shell { max-width:none; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .calculator-form > :not(.form-field) { grid-column:1 / -1; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .form-field { align-content:start; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .form-field small { font-size:.8125rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .field-actions { display:grid; justify-items:start; gap:.25rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .text-link-btn { text-align:left; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .hero-benefits { display:flex; flex-wrap:wrap; gap:.5rem; margin:0; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .hero-benefits span { padding:.25rem .5rem; background:transparent; color:var(--v2-slate); font-size:.75rem; }
+.sk-v2[data-v2-calculator="cpp-calculator"] .fast-answer-card { background:var(--v2-blue-soft); border-color:var(--v2-border); }

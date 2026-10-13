@@ -138,19 +138,15 @@
 <header class="v2s-header"><div class="v2s-wrap v2s-header-inner"><a class="v2s-brand" href="/" aria-label="SimpleKit home"><svg aria-hidden="true" focusable="false"><use href="https://core.simplekit.app/v2/icons/sprite.svg#calculator"></use></svg>SimpleKit</a><button type="button" class="v2s-menu" data-v2s-menu aria-controls="v2-cpp-calculator-nav" aria-expanded="false" hidden>Menu</button><nav class="v2s-nav" id="v2-cpp-calculator-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/tools/" aria-current="page">Tools</a><a href="/learn/">Learn</a><a href="/about/">About</a><a href="/support/">Support</a></nav></div></header>
 
   <div class="page-shell">
-    <header class="hero v2c-hero" aria-labelledby="heroTitle">
-      
+    <main class="page-flow v2c-main" id="mainContent" tabindex="-1">
+<nav class="v2s-breadcrumb" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/tools/">Tools</a></li><li><span aria-current="page">CPP Timing</span></li></ol></nav>
+<header class="hero v2c-hero" aria-labelledby="heroTitle">
+
       <div class="hero-copy">
         <h1 id="heroTitle">CPP Timing Calculator Canada</h1>
         <p class="hero-subtitle">Compare CPP at 60, 65, and 70, see your break-even age, and understand when delaying may pay off.</p>
-        <div class="hero-benefits" aria-label="Trust highlights">
-          <span>Free to use</span>
-          <span>No sign-up</span>
-          <span>Educational estimate for Canadians</span>
-        </div>
-        <div class="hero-actions no-print">
-          <button id="jumpToCalculatorBtn" class="btn btn-primary" type="button">Start your comparison</button>
-        </div>
+
+
         <p class="hero-trust-inline">
           Educational estimate only. Not a Service Canada quote.
           <a
@@ -163,7 +159,7 @@
       </div>
     </header>
 
-    <main class="page-flow v2c-main" id="mainContent" tabindex="-1">
+
       <section id="calculatorPanel" class="panel calculator-panel v2c-surface" aria-labelledby="calculatorHeading">
         <div class="panel-header">
           <h2 id="calculatorHeading">Quick start calculator</h2>
@@ -176,7 +172,7 @@
               <strong>Already know your estimated CPP at 65? Enter it below.</strong>
               <span class="muted small-copy">Not sure? Try the example first to see how the comparison works.</span>
             </div>
-            <p class="calculator-emphasis muted">Many Canadians underestimate how much CPP timing can change retirement income.</p>
+
             <div class="comparison-strip" aria-label="Comparison ages">
               <span class="comparison-pill active">Age 60</span>
               <span class="comparison-pill active">Age 65</span>
@@ -211,7 +207,8 @@
               >Official Service Canada source</a>
             </p>
 
-            <div class="form-actions no-print">
+
+<div class="form-actions no-print">
               <button id="compareBtn" class="btn btn-primary" type="submit">Calculate My CPP Strategy</button>
             </div>
 
@@ -253,7 +250,15 @@
         </div>
       </section>
 
-      <section id="resultsPanel" class="panel results-panel v2c-surface" aria-labelledby="resultsHeading">
+      <div class="hero-actions no-print">
+          <button id="jumpToCalculatorBtn" class="btn btn-primary" type="button">Start your comparison</button>
+        </div>
+<div class="hero-benefits" aria-label="Trust highlights">
+          <span>Free to use</span>
+          <span>No sign-up</span>
+          <span>Educational estimate for Canadians</span>
+        </div>
+<section id="resultsPanel" class="panel results-panel v2c-surface" aria-labelledby="resultsHeading">
         <div class="panel-header">
           <h2 id="resultsHeading">Recommendation</h2>
           <p>Your answer first, then your three choices, then the proof.</p>
@@ -338,7 +343,7 @@
           <p>Method notes, trust notes, and the official source.</p>
         </summary>
         <div class="learn-stack">
-      <section aria-labelledby="learnHeadingContent">
+      <section aria-labelledby="learnHeadingContent"><p class="calculator-emphasis muted">Many Canadians underestimate how much CPP timing can change retirement income.</p>
         <div class="panel-header">
           <p id="learnHeadingContent">Keep the method simple, so the answer stays easy to trust and understand.</p>
         </div>
@@ -524,7 +529,7 @@
         </div>
       </section>
       <div data-simplekit-support></div>
-      
+
     </main>
   </div>
 
